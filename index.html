@@ -3,256 +3,875 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>نظام إدارة المخازن الذكي - 50 جنيه فقط</title>
-    <meta name="description" content="نظام إدارة مخازن متكامل بسعر 50 جنيه فقط" />
+    <title>نظام إدارة المخازن المتكامل</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-    <link rel="stylesheet" href="style.css" />
+    <style>
+        /* ===== نفس الـ CSS القديم بالضبط مع إضافات ===== */
+        :root {
+            --primary: #1b4d3e;
+            --primary-dark: #0f3329;
+            --primary-light: #2c7a62;
+            --gold: #f5a623;
+            --gold-hover: #d98e16;
+            --bg-light: #f8faf9;
+            --card-bg: #ffffff;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --instapay: #6c3c9e;
+            --whatsapp: #25d366;
+            --danger: #e11d48;
+            --success: #16a34a;
+            --border: #e2e8f0;
+            --shadow-sm: 0 4px 6px -1px rgba(0,0,0,0.05);
+            --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+        h1,h2,h3,h4,.btn { font-family: 'Cairo', sans-serif; }
+        .container { width: 92%; max-width: 1200px; margin: 0 auto; }
+
+        /* ===== نفس الـ CSS القديم ===== */
+        .announcement-bar {
+            background: linear-gradient(90deg, var(--primary-dark), var(--primary));
+            color: #fff;
+            text-align: center;
+            padding: 0.65rem 1rem;
+            font-weight: 600;
+        }
+        .announcement-bar span { color: var(--gold); font-weight: 800; }
+
+        .hero {
+            background: radial-gradient(circle at 50% 10%, #2c7a62 0%, var(--primary) 50%, var(--primary-dark) 100%);
+            color: #fff;
+            padding: 3rem 0 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::after {
+            content: "";
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120%;
+            height: 100px;
+            background: var(--bg-light);
+            border-radius: 50% 50% 0 0;
+        }
+        .hero h1 { font-size: 3rem; font-weight: 900; line-height: 1.25; margin-bottom: 1.2rem; }
+        .hero h1 span {
+            color: var(--gold);
+            background: linear-gradient(180deg, #ffe17d 0%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero p { font-size: 1.2rem; color: #e2e8f0; max-width: 750px; margin: 0 auto 2rem; }
+
+        .section-padding { padding: 3rem 0; }
+        .section-header { text-align: center; margin-bottom: 3rem; }
+        .section-header h2 { font-size: 2.2rem; color: var(--primary-dark); font-weight: 800; }
+        .section-header p { color: var(--text-muted); font-size: 1.1rem; }
+
+        /* ===== نظام الدخول ===== */
+        .login-section {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 3rem;
+            max-width: 450px;
+            margin: -30px auto 3rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+            position: relative;
+            z-index: 10;
+        }
+        .login-section h2 {
+            text-align: center;
+            color: var(--primary-dark);
+            margin-bottom: 1.5rem;
+        }
+        .login-section .form-group {
+            margin-bottom: 1.2rem;
+        }
+        .login-section label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+            color: var(--text-dark);
+        }
+        .login-section input, .login-section select {
+            width: 100%;
+            padding: 0.9rem;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 1rem;
+            background: var(--bg-light);
+        }
+        .login-section input:focus, .login-section select:focus {
+            outline: 2px solid var(--primary-light);
+            border-color: transparent;
+        }
+        .login-btn {
+            background: var(--primary);
+            color: #fff;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .login-btn:hover { background: var(--primary-dark); transform: translateY(-2px); }
+
+        /* ===== لوحة التحكم ===== */
+        .dashboard {
+            display: none;
+            margin-top: 2rem;
+        }
+        .dashboard.active { display: block; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+        .stat-card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 0.5rem; }
+        .stat-card .num { font-size: 2rem; font-weight: 900; color: var(--primary-dark); }
+        .stat-card .label { color: var(--text-muted); font-size: 0.9rem; }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        @media (max-width: 768px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+        }
+
+        .panel-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+        .panel-card h3 {
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .panel-card table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+        .panel-card th {
+            background: var(--bg-light);
+            padding: 0.7rem;
+            text-align: right;
+            font-weight: 700;
+            color: var(--text-dark);
+            border-bottom: 2px solid var(--border);
+        }
+        .panel-card td {
+            padding: 0.7rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .panel-card .badge-success {
+            background: #dcfce7;
+            color: var(--success);
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+        .panel-card .badge-danger {
+            background: #fee2e2;
+            color: var(--danger);
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .btn-sm {
+            padding: 0.4rem 1rem;
+            border-radius: 8px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+        .btn-sm-primary { background: var(--primary); color: #fff; }
+        .btn-sm-primary:hover { background: var(--primary-dark); }
+        .btn-sm-danger { background: var(--danger); color: #fff; }
+        .btn-sm-danger:hover { background: #b91c1c; }
+        .btn-sm-success { background: var(--success); color: #fff; }
+        .btn-sm-success:hover { background: #15803d; }
+
+        .add-product-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .add-product-form input {
+            padding: 0.7rem;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-family: 'Tajawal', sans-serif;
+        }
+        .add-product-form .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .footer {
+            background: var(--primary-dark);
+            color: #94a3b8;
+            padding: 3rem 0 2rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        /* ===== إشعارات ===== */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 30px;
+            background: var(--primary-dark);
+            color: #fff;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            z-index: 999;
+            display: none;
+            animation: slideUp 0.3s ease;
+        }
+        .toast.show { display: block; }
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* ===== إضافات صغيرة ===== */
+        .role-badge {
+            display: inline-block;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .role-badge.admin { background: #fef3c7; color: #92400e; }
+        .role-badge.storekeeper { background: #dbeafe; color: #1e40af; }
+
+        .user-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-light);
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border);
+        }
+        .logout-btn {
+            background: var(--danger);
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .logout-btn:hover { background: #b91c1c; }
+
+        .empty-state {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 2rem 0;
+        }
+        .empty-state i { font-size: 3rem; margin-bottom: 1rem; color: var(--border); }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .add-product-form { grid-template-columns: 1fr; }
+            .login-section { padding: 1.5rem; margin: -20px auto 2rem; }
+        }
+    </style>
 </head>
 <body>
 
-    <div class="scroll-progress" id="scrollProgress"></div>
-
-    <!-- شريط التقييمات -->
-    <div class="marquee-bar">
-        <div class="marquee-content">
-            <span>⭐⭐⭐⭐⭐ "أفضل نظام!" - أحمد</span>
-            <span>⭐⭐⭐⭐⭐ "غير طريقة شغلي!" - سارة</span>
-            <span>⭐⭐⭐⭐⭐ "أنصح به!" - محمد</span>
-            <span>⭐⭐⭐⭐⭐ "دعم ممتاز!" - نورة</span>
-            <span>⭐⭐⭐⭐⭐ "سهل وبسيط!" - علي</span>
-            <span>⭐⭐⭐⭐⭐ "أفضل استثمار!" - فاطمة</span>
-            <span>⭐⭐⭐⭐⭐ "أفضل نظام!" - أحمد</span>
-            <span>⭐⭐⭐⭐⭐ "غير طريقة شغلي!" - سارة</span>
-            <span>⭐⭐⭐⭐⭐ "أنصح به!" - محمد</span>
-            <span>⭐⭐⭐⭐⭐ "دعم ممتاز!" - نورة</span>
-            <span>⭐⭐⭐⭐⭐ "سهل وبسيط!" - علي</span>
-            <span>⭐⭐⭐⭐⭐ "أفضل استثمار!" - فاطمة</span>
-        </div>
-    </div>
-
-    <!-- إعلانات -->
+    <!-- ===== شريط الإعلانات ===== -->
     <div class="announcement-bar">
-        <i class="fas fa-fire"></i> عرض خاص: نظام إدارة المخازن بـ <span>50 جنيه</span> فقط! <i class="fas fa-arrow-left"></i>
+        <i class="fas fa-warehouse"></i> نظام إدارة المخازن المتكامل <span>Excel Based</span> <i class="fas fa-arrow-left"></i>
     </div>
 
-    <!-- الهيرو -->
-    <section class="hero" id="home">
+    <!-- ===== الهيرو ===== -->
+    <section class="hero">
         <div class="container">
-            <div class="hero-badge fade-up"><i class="fas fa-crown"></i> الأكثر مبيعاً في مصر</div>
-            <h1 class="fade-up">نظام إدارة المخازن <br /><span>الذكي والمتكامل</span></h1>
-            <p class="fade-up">تحكم كامل في مخزونك، تتبع المبيعات، إدارة العملاء — كل هذا بسعر <strong style="color: var(--gold); font-size: 1.5rem;">50 جنيه</strong> فقط!</p>
-            <div class="hero-image-wrapper fade-up">
-                <img src="https://placehold.co/800x450/1b4d3e/ffffff?text=نظام+المخازن+الذكي+50+جنيه" alt="نظام إدارة المخازن" class="hero-main-image" loading="lazy" />
-                <div class="video-play-btn" onclick="openVideoModal()"><i class="fas fa-play"></i><span>شاهد الفيديو</span></div>
-            </div>
-            <div class="hero-btns fade-up">
-                <a href="#products" class="cta-btn"><i class="fas fa-rocket"></i> اشتري بـ 50 جنيه</a>
-                <a href="#demo" class="cta-btn-secondary"><i class="fas fa-play-circle"></i> جرب التجريبي</a>
-            </div>
-            <div class="trust-stats fade-up">
-                <div class="stat-item"><i class="fas fa-users"></i><span class="stat-number" data-count="5000">0</span><span class="stat-label">عميل</span></div>
-                <div class="stat-item"><i class="fas fa-star"></i><span class="stat-number" data-count="4.9">0</span><span class="stat-label">تقييم</span></div>
-                <div class="stat-item"><i class="fas fa-store"></i><span class="stat-number" data-count="1200">0</span><span class="stat-label">متجر</span></div>
-            </div>
+            <h1>نظام إدارة المخازن <br /><span>المتكامل</span></h1>
+            <p>إدارة كاملة للمخزون، حركة الصرف والإستلام، تقارير لحظية — كل هذا في منصة واحدة سهلة وبسيطة.</p>
         </div>
     </section>
 
-    <!-- آخر المشترين -->
-    <section class="recent-buyers">
-        <div class="container">
-            <div class="recent-buyers-content"><i class="fas fa-shopping-cart"></i><span id="recentBuyers">أحمد من القاهرة اشترى النظام منذ 3 دقائق</span></div>
+    <!-- ===== نموذج الدخول ===== -->
+    <div class="container">
+        <div class="login-section" id="loginSection">
+            <h2><i class="fas fa-user-lock"></i> تسجيل الدخول</h2>
+            <div class="form-group">
+                <label>اسم المستخدم</label>
+                <input type="text" id="username" placeholder="أدخل اسم المستخدم" />
+            </div>
+            <div class="form-group">
+                <label>كلمة المرور</label>
+                <input type="password" id="password" placeholder="أدخل كلمة المرور" />
+            </div>
+            <div class="form-group">
+                <label>نوع المستخدم</label>
+                <select id="userRole">
+                    <option value="storekeeper">أمين المخزن</option>
+                    <option value="manager">مدير المخازن</option>
+                </select>
+            </div>
+            <button class="login-btn" onclick="login()"><i class="fas fa-sign-in-alt"></i> دخول</button>
+            <p style="text-align: center; margin-top: 1rem; font-size: 0.85rem; color: var(--text-muted);">
+                <i class="fas fa-info-circle"></i> 
+                أمين المخزن: user / 123 &nbsp;|&nbsp; مدير المخازن: admin / 123
+            </p>
         </div>
-    </section>
 
-    <!-- العد التنازلي -->
-    <div class="timer-card scale-in">
-        <div class="timer-title"><i class="fas fa-clock" style="color: var(--danger);"></i> ينتهي العرض خلال</div>
-        <div class="countdown-boxes" id="countdown">
-            <div class="time-box"><span class="num" id="days">00</span><span class="label">يوم</span></div>
-            <div class="time-box"><span class="num" id="hours">00</span><span class="label">ساعة</span></div>
-            <div class="time-box"><span class="num" id="minutes">00</span><span class="label">دقيقة</span></div>
-            <div class="time-box"><span class="num" id="seconds">00</span><span class="label">ثانية</span></div>
+        <!-- ===== لوحة التحكم ===== -->
+        <div class="dashboard" id="dashboard">
+            <div class="user-info">
+                <div>
+                    <i class="fas fa-user-circle" style="font-size: 1.5rem; color: var(--primary);"></i>
+                    <span id="displayName" style="font-weight: 700; margin-right: 0.5rem;">المستخدم</span>
+                    <span class="role-badge" id="displayRole">أمين المخزن</span>
+                </div>
+                <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> خروج</button>
+            </div>
+
+            <!-- ===== الإحصائيات ===== -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-boxes"></i>
+                    <div class="num" id="totalProducts">0</div>
+                    <div class="label">إجمالي المنتجات</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-arrow-down"></i>
+                    <div class="num" id="totalOut">0</div>
+                    <div class="label">إجمالي الصرف</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-arrow-up"></i>
+                    <div class="num" id="totalIn">0</div>
+                    <div class="label">إجمالي الإستلام</div>
+                </div>
+                <div class="stat-card" id="lowStockCard">
+                    <i class="fas fa-exclamation-triangle" style="color: var(--danger);"></i>
+                    <div class="num" id="lowStockCount">0</div>
+                    <div class="label">منتجات منخفضة</div>
+                </div>
+            </div>
+
+            <!-- ===== الأقسام ===== -->
+            <div class="dashboard-grid">
+                <!-- ===== المنتجات ===== -->
+                <div class="panel-card">
+                    <h3><i class="fas fa-box"></i> إدارة المنتجات</h3>
+
+                    <!-- إضافة منتج (لأمين المخزن والمدير) -->
+                    <div class="add-product-form" id="addProductForm">
+                        <input type="text" id="prodName" placeholder="اسم المنتج" />
+                        <input type="number" id="prodQty" placeholder="الكمية" />
+                        <input type="number" id="prodPrice" placeholder="السعر" />
+                        <input type="text" id="prodCode" placeholder="كود المنتج (اختياري)" />
+                        <button class="btn-sm btn-sm-success full-width" onclick="addProduct()" style="padding: 0.7rem; font-size: 1rem;">
+                            <i class="fas fa-plus"></i> إضافة منتج
+                        </button>
+                    </div>
+
+                    <!-- جدول المنتجات -->
+                    <div style="max-height: 300px; overflow-y: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>المنتج</th>
+                                    <th>الكمية</th>
+                                    <th>السعر</th>
+                                    <th>الحالة</th>
+                                    <th>إجراء</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productsTable">
+                                <tr>
+                                    <td colspan="6" class="empty-state">
+                                        <i class="fas fa-box-open"></i>
+                                        <p>لا توجد منتجات، أضف منتجك الأول</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ===== حركة الصرف والإستلام ===== -->
+                <div class="panel-card">
+                    <h3><i class="fas fa-exchange-alt"></i> حركة المخزون</h3>
+
+                    <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;">
+                        <select id="transactionType" style="flex: 1; padding: 0.5rem; border: 1px solid var(--border); border-radius: 8px; font-family: 'Tajawal', sans-serif;">
+                            <option value="in">إستلام</option>
+                            <option value="out">صرف</option>
+                        </select>
+                        <select id="transactionProduct" style="flex: 2; padding: 0.5rem; border: 1px solid var(--border); border-radius: 8px; font-family: 'Tajawal', sans-serif;">
+                            <option value="">اختر المنتج</option>
+                        </select>
+                        <input type="number" id="transactionQty" placeholder="الكمية" style="flex: 1; padding: 0.5rem; border: 1px solid var(--border); border-radius: 8px; min-width: 80px;" />
+                        <button class="btn-sm btn-sm-primary" onclick="addTransaction()" style="padding: 0.5rem 1.5rem;">
+                            <i class="fas fa-check"></i>
+                        </button>
+                    </div>
+
+                    <div style="max-height: 300px; overflow-y: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>المنتج</th>
+                                    <th>النوع</th>
+                                    <th>الكمية</th>
+                                    <th>التاريخ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactionsTable">
+                                <tr>
+                                    <td colspan="5" class="empty-state">
+                                        <i class="fas fa-history"></i>
+                                        <p>لا توجد حركة حتى الآن</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== تقارير المدير ===== -->
+            <div id="managerReports" style="display: none; margin-top: 2rem;">
+                <div class="panel-card">
+                    <h3><i class="fas fa-chart-bar"></i> تقارير متقدمة (مدير المخازن)</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                        <div style="background: var(--bg-light); padding: 1rem; border-radius: 12px; text-align: center;">
+                            <div style="font-size: 0.85rem; color: var(--text-muted);">إجمالي الصرف</div>
+                            <div style="font-size: 1.8rem; font-weight: 900; color: var(--danger);" id="reportOut">0</div>
+                        </div>
+                        <div style="background: var(--bg-light); padding: 1rem; border-radius: 12px; text-align: center;">
+                            <div style="font-size: 0.85rem; color: var(--text-muted);">إجمالي الإستلام</div>
+                            <div style="font-size: 1.8rem; font-weight: 900; color: var(--success);" id="reportIn">0</div>
+                        </div>
+                        <div style="background: var(--bg-light); padding: 1rem; border-radius: 12px; text-align: center;">
+                            <div style="font-size: 0.85rem; color: var(--text-muted);">قيمة المخزون</div>
+                            <div style="font-size: 1.8rem; font-weight: 900; color: var(--primary);" id="reportValue">0</div>
+                        </div>
+                    </div>
+                    <button class="btn-sm btn-sm-primary" onclick="exportReport()" style="padding: 0.7rem 2rem;">
+                        <i class="fas fa-file-excel"></i> تصدير تقرير Excel
+                    </button>
+                </div>
+            </div>
+
         </div>
-        <div style="margin-top:1rem;font-weight:700;color:var(--primary-dark);"><i class="fas fa-gift" style="color:var(--gold);"></i> باقي <span id="remainingCopies" style="color:var(--danger);">5</span> نسخ بهذا السعر!</div>
     </div>
 
-    <!-- كيف يعمل -->
-    <section class="section-padding" id="how-it-works">
-        <div class="container">
-            <div class="section-header fade-up"><h2>📋 كيف يعمل النظام؟</h2><p>4 خطوات بسيطة</p></div>
-            <div class="steps-grid">
-                <div class="step-card fade-up"><div class="step-number">1</div><div class="step-icon"><i class="fas fa-user-plus"></i></div><h3>إنشاء حساب</h3><p>سجل في دقيقة</p></div>
-                <div class="step-card fade-up"><div class="step-number">2</div><div class="step-icon"><i class="fas fa-boxes"></i></div><h3>إضافة المنتجات</h3><p>أضف منتجاتك</p></div>
-                <div class="step-card fade-up"><div class="step-number">3</div><div class="step-icon"><i class="fas fa-chart-line"></i></div><h3>إدارة المبيعات</h3><p>تابع المبيعات</p></div>
-                <div class="step-card fade-up"><div class="step-number">4</div><div class="step-icon"><i class="fas fa-file-invoice"></i></div><h3>تقارير متقدمة</h3><p>احصل على تقارير</p></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- عرض المنتج -->
-    <section class="section-padding" id="demo">
-        <div class="container">
-            <div class="showcase-grid">
-                <div class="preview-box slide-left">
-                    <i class="fas fa-cubes main-icon"></i>
-                    <h3>واجهة النظام</h3>
-                    <p>تصميم عصري وبسيط</p>
-                    <div class="preview-features">
-                        <span class="preview-feat-tag"><i class="fas fa-check-circle"></i> لوحة تحكم</span>
-                        <span class="preview-feat-tag"><i class="fas fa-check-circle"></i> تقارير</span>
-                        <span class="preview-feat-tag"><i class="fas fa-check-circle"></i> عملاء</span>
-                        <span class="preview-feat-tag"><i class="fas fa-check-circle"></i> فواتير</span>
-                    </div>
-                    <div class="mini-video-preview" onclick="openVideoModal()"><i class="fas fa-play-circle"></i><span>شاهد الفيديو</span></div>
-                </div>
-                <div class="showcase-content slide-right">
-                    <h3>🚀 كل ما تحتاجه</h3>
-                    <ul class="feature-list">
-                        <li><i class="fas fa-check-circle"></i> إدارة المنتجات</li>
-                        <li><i class="fas fa-check-circle"></i> تتبع المخزون</li>
-                        <li><i class="fas fa-check-circle"></i> تقارير متقدمة</li>
-                        <li><i class="fas fa-check-circle"></i> إدارة العملاء</li>
-                        <li><i class="fas fa-check-circle"></i> فواتير إلكترونية</li>
-                        <li><i class="fas fa-check-circle"></i> يعمل على كل الأجهزة</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- شهادات -->
-    <section class="section-padding testimonials-section">
-        <div class="container">
-            <div class="section-header fade-up"><h2>💬 آراء العملاء</h2><p>آراء حقيقية</p></div>
-            <div class="testimonials-grid">
-                <div class="testimonial-card scale-in">
-                    <div class="stars">★★★★★</div>
-                    <p class="testimonial-text">"غير طريقة إدارة المخزون عندي تماماً!"</p>
-                    <div class="testimonial-author"><img src="https://placehold.co/50x50/1b4d3e/ffffff?text=أ" alt="أحمد" /><div><strong>أحمد السيد</strong><span>مدير مخازن</span></div></div>
-                </div>
-                <div class="testimonial-card scale-in">
-                    <div class="stars">★★★★★</div>
-                    <p class="testimonial-text">"أفضل نظام! سهل وبسيط وسعره 50 جنيه بس!"</p>
-                    <div class="testimonial-author"><img src="https://placehold.co/50x50/1b4d3e/ffffff?text=م" alt="محمد" /><div><strong>محمد علي</strong><span>صاحب متجر</span></div></div>
-                </div>
-                <div class="testimonial-card scale-in">
-                    <div class="stars">★★★★★</div>
-                    <p class="testimonial-text">"دعم ممتاز وأنصح به بشدة!"</p>
-                    <div class="testimonial-author"><img src="https://placehold.co/50x50/1b4d3e/ffffff?text=س" alt="سارة" /><div><strong>سارة خالد</strong><span>مديرة عمليات</span></div></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- الباقات -->
-    <section class="section-padding" id="products">
-        <div class="container">
-            <div class="section-header fade-up"><h2>💎 الباقات</h2><p>كل الباقات بـ <strong style="color:var(--gold);font-size:1.5rem;">50 جنيه</strong></p></div>
-            <div class="products-grid">
-                <div class="product-card fade-up">
-                    <div class="card-header-icon"><i class="fas fa-store"></i></div>
-                    <div class="card-body">
-                        <h3 class="card-title">الأساسية</h3>
-                        <div class="card-price-box"><span class="price-old">200 جنيه</span><span class="price-current">50</span><span class="price-currency">جنيه</span></div>
-                        <ul class="feature-list-card"><li><i class="fas fa-check"></i> 500 منتج</li><li><i class="fas fa-check"></i> تقارير أساسية</li><li><i class="fas fa-check"></i> دعم فني</li></ul>
-                        <div class="btn-group">
-                            <button class="btn btn-wa" onclick="orderViaWhatsApp('الأساسية',50)"><i class="fab fa-whatsapp"></i> واتساب</button>
-                            <button class="btn btn-instapay" onclick="showInstapay('الأساسية',50)"><i class="fas fa-bolt"></i> إنستاباي</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="product-card featured scale-in">
-                    <div class="featured-badge"><i class="fas fa-star"></i> الأكثر مبيعاً</div>
-                    <div class="card-header-icon" style="background:linear-gradient(135deg,#fef3c7,#fde68a);"><i class="fas fa-crown" style="color:var(--gold);"></i></div>
-                    <div class="card-body">
-                        <h3 class="card-title">الاحترافية</h3>
-                        <div class="card-price-box"><span class="price-old">350 جنيه</span><span class="price-current">50</span><span class="price-currency">جنيه</span></div>
-                        <ul class="feature-list-card"><li><i class="fas fa-check"></i> 5000 منتج</li><li><i class="fas fa-check"></i> تقارير متقدمة</li><li><i class="fas fa-check"></i> فواتير وباركود</li><li><i class="fas fa-check"></i> دعم VIP</li></ul>
-                        <div class="btn-group">
-                            <button class="btn btn-wa" onclick="orderViaWhatsApp('الاحترافية',50)"><i class="fab fa-whatsapp"></i> واتساب</button>
-                            <button class="btn btn-instapay" onclick="showInstapay('الاحترافية',50)"><i class="fas fa-bolt"></i> إنستاباي</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="product-card fade-up">
-                    <div class="card-header-icon" style="background:linear-gradient(135deg,#dbeafe,#bfdbfe);"><i class="fas fa-rocket" style="color:#2563eb;"></i></div>
-                    <div class="card-body">
-                        <h3 class="card-title">الممتازة</h3>
-                        <div class="card-price-box"><span class="price-old">500 جنيه</span><span class="price-current">50</span><span class="price-currency">جنيه</span></div>
-                        <ul class="feature-list-card"><li><i class="fas fa-check"></i> غير محدود</li><li><i class="fas fa-check"></i> كل التقارير</li><li><i class="fas fa-check"></i> فروع متعددة</li><li><i class="fas fa-check"></i> دعم 24/7</li></ul>
-                        <div class="btn-group">
-                            <button class="btn btn-wa" onclick="orderViaWhatsApp('الممتازة',50)"><i class="fab fa-whatsapp"></i> واتساب</button>
-                            <button class="btn btn-instapay" onclick="showInstapay('الممتازة',50)"><i class="fas fa-bolt"></i> إنستاباي</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- الضمان -->
-    <section class="guarantee-section">
-        <div class="container">
-            <div class="guarantee-box">
-                <i class="fas fa-shield-alt"></i>
-                <h2>ضمان 30 يوماً</h2>
-                <p>إذا لم يناسبك النظام، سنعيد لك المبلغ بالكامل!</p>
-                <div class="guarantee-features"><span><i class="fas fa-check-circle"></i> ضمان 100%</span><span><i class="fas fa-check-circle"></i> دعم مجاني</span><span><i class="fas fa-check-circle"></i> تحديثات</span></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- الفوتر -->
+    <!-- ===== الفوتر ===== -->
     <footer class="footer">
         <div class="container">
-            <div class="social-links"><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-youtube"></i></a><a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-linkedin-in"></i></a></div>
-            <p>&copy; 2026 نظام إدارة المخازن الذكي. جميع الحقوق محفوظة.</p>
+            <p>&copy; 2026 نظام إدارة المخازن المتكامل. جميع الحقوق محفوظة.</p>
         </div>
     </footer>
 
-    <!-- واتساب عائم -->
-    <a href="https://wa.me/201112876080" target="_blank" class="wa-float"><i class="fab fa-whatsapp"></i></a>
+    <!-- ===== إشعار ===== -->
+    <div class="toast" id="toast"></div>
 
-    <!-- نافذة إنستاباي -->
-    <div class="popup-overlay" id="instapayPopup">
-        <div class="popup">
-            <div class="popup-icon"><i class="fas fa-bolt"></i></div>
-            <h3>تأكيد الطلب</h3>
-            <p><strong id="popupProduct">الباقة الاحترافية</strong></p>
-            <p style="font-size:1.5rem;font-weight:800;color:var(--primary);">المبلغ: <span id="popupPrice">50</span> جنيه</p>
-            <div class="instapay-account"><i class="fas fa-university"></i> إنستاباي: <strong>01112876080</strong></div>
-            <div class="whatsapp-notice"><i class="fab fa-whatsapp"></i> أرسل إيصال الدفع على واتساب</div>
-            <div style="background:#fef3c7;padding:1rem;border-radius:12px;margin:1rem 0;border-right:4px solid var(--gold);text-align:right;">
-                <p style="font-weight:700;color:#92400e;">📌 خطوات الاستلام:</p>
-                <ol style="color:#78350f;list-style-position:inside;padding-right:0;font-size:0.9rem;">
-                    <li>📱 حول 50 جنيه عبر إنستاباي</li>
-                    <li>📸 أرسل الإيصال على واتساب</li>
-                    <li>📥 استلم رابط التحميل خلال 5 دقائق</li>
-                </ol>
-            </div>
-            <div class="popup-btns">
-                <button class="btn btn-instapay" onclick="closePopup()" style="flex:1;"><i class="fas fa-check"></i> تم الدفع</button>
-                <button class="btn btn-cancel" onclick="closePopup()" style="flex:1;">إلغاء</button>
-            </div>
-        </div>
-    </div>
+    <script>
+        // ============================================================
+        //  نظام إدارة المخازن - JavaScript كامل (Excel Sheets محاكاة)
+        // ============================================================
 
-    <!-- نافذة الفيديو -->
-    <div class="popup-overlay" id="videoPopup">
-        <div class="popup" style="max-width:700px;">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
-                <h3 style="color:var(--primary-dark);">🎬 الفيديو التوضيحي</h3>
-                <button onclick="closeVideoPopup()" style="background:none;border:none;font-size:1.8rem;cursor:pointer;color:var(--text-muted);"><i class="fas fa-times"></i></button>
-            </div>
-            <div style="position:relative;padding-bottom:56.25%;height:0;">
-                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:12px;" frameborder="0" allowfullscreen id="videoIframe"></iframe>
-            </div>
-        </div>
-    </div>
+        // ===== قاعدة البيانات (مخزنة في LocalStorage = Sheets) =====
+        let data = {
+            products: [],      // { id, name, qty, price, code }
+            transactions: [],  // { id, productId, type, qty, date }
+            users: [           // { username, password, role }
+                { username: 'user', password: '123', role: 'storekeeper' },
+                { username: 'admin', password: '123', role: 'manager' }
+            ],
+            currentUser: null
+        };
 
-    <script src="script.js"></script>
+        // ===== تحميل البيانات من LocalStorage =====
+        function loadData() {
+            const stored = localStorage.getItem('inventoryData');
+            if (stored) {
+                try {
+                    const parsed = JSON.parse(stored);
+                    data.products = parsed.products || [];
+                    data.transactions = parsed.transactions || [];
+                    data.users = parsed.users || data.users;
+                } catch (e) {
+                    console.warn('Error loading data, using defaults');
+                }
+            }
+        }
+
+        // ===== حفظ البيانات في LocalStorage =====
+        function saveData() {
+            localStorage.setItem('inventoryData', JSON.stringify({
+                products: data.products,
+                transactions: data.transactions,
+                users: data.users
+            }));
+        }
+
+        // ===== تسجيل الدخول =====
+        function login() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const role = document.getElementById('userRole').value;
+
+            if (!username || !password) {
+                showToast('⚠️ من فضلك أدخل اسم المستخدم وكلمة المرور');
+                return;
+            }
+
+            // التحقق من المستخدم
+            const user = data.users.find(u => u.username === username && u.password === password);
+            if (!user) {
+                showToast('❌ اسم المستخدم أو كلمة المرور غير صحيحة');
+                return;
+            }
+
+            // التحقق من الصلاحية
+            if (user.role !== role) {
+                showToast(`⚠️ هذا المستخدم ليس ${role === 'manager' ? 'مدير مخازن' : 'أمين مخزن'}`);
+                return;
+            }
+
+            data.currentUser = user;
+            showToast(`✅ مرحباً ${username} (${role === 'manager' ? 'مدير المخازن' : 'أمين المخزن'})`);
+
+            // إظهار لوحة التحكم
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('dashboard').classList.add('active');
+
+            // تحديث الواجهة
+            document.getElementById('displayName').textContent = username;
+            document.getElementById('displayRole').textContent = role === 'manager' ? 'مدير المخازن' : 'أمين المخزن';
+            document.getElementById('displayRole').className = `role-badge ${role === 'manager' ? 'admin' : 'storekeeper'}`;
+
+            // إظهار تقارير المدير
+            if (role === 'manager') {
+                document.getElementById('managerReports').style.display = 'block';
+            }
+
+            // تحديث الجداول
+            renderProducts();
+            renderTransactions();
+            updateStats();
+            updateProductSelect();
+
+            saveData();
+        }
+
+        // ===== تسجيل الخروج =====
+        function logout() {
+            data.currentUser = null;
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('dashboard').classList.remove('active');
+            document.getElementById('managerReports').style.display = 'none';
+            showToast('👋 تم تسجيل الخروج');
+        }
+
+        // ===== إضافة منتج =====
+        function addProduct() {
+            const name = document.getElementById('prodName').value.trim();
+            const qty = parseInt(document.getElementById('prodQty').value);
+            const price = parseFloat(document.getElementById('prodPrice').value);
+            const code = document.getElementById('prodCode').value.trim();
+
+            if (!name || isNaN(qty) || qty < 0 || isNaN(price) || price < 0) {
+                showToast('⚠️ من فضلك أدخل بيانات صحيحة');
+                return;
+            }
+
+            const newProduct = {
+                id: Date.now(),
+                name: name,
+                qty: qty,
+                price: price,
+                code: code || '-'
+            };
+
+            data.products.push(newProduct);
+            saveData();
+            renderProducts();
+            updateStats();
+            updateProductSelect();
+            showToast(`✅ تم إضافة المنتج: ${name}`);
+
+            // مسح الحقول
+            document.getElementById('prodName').value = '';
+            document.getElementById('prodQty').value = '';
+            document.getElementById('prodPrice').value = '';
+            document.getElementById('prodCode').value = '';
+        }
+
+        // ===== حذف منتج (للمدير فقط) =====
+        function deleteProduct(id) {
+            if (data.currentUser?.role !== 'manager') {
+                showToast('⚠️ فقط مدير المخازن يمكنه حذف المنتجات');
+                return;
+            }
+            if (!confirm('هل أنت متأكد من حذف هذا المنتج؟')) return;
+
+            data.products = data.products.filter(p => p.id !== id);
+            saveData();
+            renderProducts();
+            updateStats();
+            updateProductSelect();
+            showToast('🗑️ تم حذف المنتج');
+        }
+
+        // ===== إضافة حركة (صرف/إستلام) =====
+        function addTransaction() {
+            const productId = parseInt(document.getElementById('transactionProduct').value);
+            const type = document.getElementById('transactionType').value;
+            const qty = parseInt(document.getElementById('transactionQty').value);
+
+            if (!productId || isNaN(qty) || qty <= 0) {
+                showToast('⚠️ من فضلك اختر منتج وأدخل كمية صحيحة');
+                return;
+            }
+
+            const product = data.products.find(p => p.id === productId);
+            if (!product) {
+                showToast('❌ المنتج غير موجود');
+                return;
+            }
+
+            // التحقق من الكمية المتاحة للصرف
+            if (type === 'out' && product.qty < qty) {
+                showToast(`❌ الكمية غير متوفرة! المتاح: ${product.qty}`);
+                return;
+            }
+
+            // تحديث كمية المنتج
+            if (type === 'in') {
+                product.qty += qty;
+            } else {
+                product.qty -= qty;
+            }
+
+            // تسجيل الحركة
+            data.transactions.push({
+                id: Date.now(),
+                productId: productId,
+                productName: product.name,
+                type: type,
+                qty: qty,
+                date: new Date().toLocaleString('ar-EG')
+            });
+
+            saveData();
+            renderProducts();
+            renderTransactions();
+            updateStats();
+            updateProductSelect();
+            showToast(`✅ تم ${type === 'in' ? 'إستلام' : 'صرف'} ${qty} من ${product.name}`);
+
+            document.getElementById('transactionQty').value = '';
+        }
+
+        // ===== عرض المنتجات =====
+        function renderProducts() {
+            const tbody = document.getElementById('productsTable');
+            if (data.products.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <i class="fas fa-box-open"></i>
+                            <p>لا توجد منتجات، أضف منتجك الأول</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = data.products.map((p, i) => `
+                <tr>
+                    <td>${i + 1}</td>
+                    <td><strong>${p.name}</strong> ${p.code !== '-' ? `<span style="font-size:0.75rem;color:var(--text-muted);">(${p.code})</span>` : ''}</td>
+                    <td>${p.qty}</td>
+                    <td>${p.price.toFixed(2)} جنيه</td>
+                    <td>
+                        ${p.qty <= 5 ? '<span class="badge-danger">منخفض</span>' : '<span class="badge-success">متوفر</span>'}
+                    </td>
+                    <td>
+                        ${data.currentUser?.role === 'manager' ? `<button class="btn-sm btn-sm-danger" onclick="deleteProduct(${p.id})"><i class="fas fa-trash"></i></button>` : ''}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // ===== عرض الحركات =====
+        function renderTransactions() {
+            const tbody = document.getElementById('transactionsTable');
+            const transactions = data.transactions.slice(-20).reverse();
+
+            if (transactions.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="empty-state">
+                            <i class="fas fa-history"></i>
+                            <p>لا توجد حركة حتى الآن</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = transactions.map((t, i) => `
+                <tr>
+                    <td>${i + 1}</td>
+                    <td>${t.productName}</td>
+                    <td>
+                        <span class="${t.type === 'in' ? 'badge-success' : 'badge-danger'}">
+                            ${t.type === 'in' ? '📥 إستلام' : '📤 صرف'}
+                        </span>
+                    </td>
+                    <td>${t.qty}</td>
+                    <td style="font-size:0.85rem;color:var(--text-muted);">${t.date}</td>
+                </tr>
+            `).join('');
+        }
+
+        // ===== تحديث الإحصائيات =====
+        function updateStats() {
+            const total = data.products.length;
+            const totalQty = data.products.reduce((sum, p) => sum + p.qty, 0);
+            const lowStock = data.products.filter(p => p.qty <= 5).length;
+            const totalIn = data.transactions.filter(t => t.type === 'in').reduce((sum, t) => sum + t.qty, 0);
+            const totalOut = data.transactions.filter(t => t.type === 'out').reduce((sum, t) => sum + t.qty, 0);
+            const totalValue = data.products.reduce((sum, p) => sum + (p.qty * p.price), 0);
+
+            document.getElementById('totalProducts').textContent = total;
+            document.getElementById('totalIn').textContent = totalIn;
+            document.getElementById('totalOut').textContent = totalOut;
+            document.getElementById('lowStockCount').textContent = lowStock;
+
+            // تقارير المدير
+            document.getElementById('reportOut').textContent = totalOut;
+            document.getElementById('reportIn').textContent = totalIn;
+            document.getElementById('reportValue').textContent = totalValue.toFixed(2) + ' جنيه';
+        }
+
+        // ===== تحديث قائمة المنتجات في حركة الصرف =====
+        function updateProductSelect() {
+            const select = document.getElementById('transactionProduct');
+            select.innerHTML = '<option value="">اختر المنتج</option>' +
+                data.products.map(p => `<option value="${p.id}">${p.name} (${p.qty})</option>`).join('');
+        }
+
+        // ===== تصدير تقرير (محاكاة Excel) =====
+        function exportReport() {
+            if (data.currentUser?.role !== 'manager') {
+                showToast('⚠️ فقط مدير المخازن يمكنه تصدير التقارير');
+                return;
+            }
+
+            let text = 'تقرير المخزون\n';
+            text += '='.repeat(40) + '\n';
+            text += `التاريخ: ${new Date().toLocaleString('ar-EG')}\n`;
+            text += `إجمالي المنتجات: ${data.products.length}\n`;
+            text += `إجمالي الصرف: ${data.transactions.filter(t => t.type === 'out').reduce((s, t) => s + t.qty, 0)}\n`;
+            text += `إجمالي الإستلام: ${data.transactions.filter(t => t.type === 'in').reduce((s, t) => s + t.qty, 0)}\n`;
+            text += '='.repeat(40) + '\n\n';
+            text += 'المنتجات:\n';
+            text += 'اسم المنتج | الكمية | السعر\n';
+            text += '-'.repeat(30) + '\n';
+            data.products.forEach(p => {
+                text += `${p.name} | ${p.qty} | ${p.price} جنيه\n`;
+            });
+            text += '\n' + '='.repeat(40) + '\n';
+            text += 'آخر الحركات:\n';
+            data.transactions.slice(-10).forEach(t => {
+                text += `${t.date} - ${t.productName} (${t.type === 'in' ? 'إستلام' : 'صرف'}) ${t.qty}\n`;
+            });
+
+            // تحميل الملف
+            const blob = new Blob([text], { type: 'text/plain' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `تقرير_المخزون_${new Date().toISOString().slice(0,10)}.txt`;
+            a.click();
+            showToast('📥 تم تصدير التقرير');
+        }
+
+        // ===== إشعارات =====
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            clearTimeout(toast._timer);
+            toast._timer = setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // ===== تحميل البيانات عند بدء التشغيل =====
+        loadData();
+        renderProducts();
+        renderTransactions();
+        updateStats();
+        updateProductSelect();
+
+        // ===== اختصارات لوحة المفاتيح =====
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && document.getElementById('loginSection').style.display !== 'none') {
+                login();
+            }
+        });
+
+        console.log('✅ نظام إدارة المخازن شغال بنجاح!');
+        console.log('🔑 user / 123 (أمين مخزن) | admin / 123 (مدير مخازن)');
+    </script>
+
 </body>
 </html>
