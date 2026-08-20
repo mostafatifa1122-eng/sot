@@ -30,7 +30,7 @@
 
         .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
 
-        /* ===== شريط الإعلانات ===== */
+        /* ===== شريط الإعلانات مع الرقم واضح ===== */
         .announcement {
             background: var(--primary);
             color: #fff;
@@ -52,7 +52,7 @@
         }
         .announcement .whatsapp-icon { color: var(--whatsapp); margin: 0 5px; }
 
-        /* ===== الهيدر ===== */
+        /* ===== الهيدر مع زر واتساب ===== */
         header {
             background: var(--primary);
             padding: 15px 20px;
@@ -212,7 +212,93 @@
         .feature-card h3 { font-size: 1.1rem; margin-bottom: 5px; }
         .feature-card p { color: var(--text-light); font-size: 0.9rem; }
 
-        /* ===== طرق الدفع (الرقم واضح) ===== */
+        /* ===== معرض الصور ===== */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .gallery-item {
+            background: var(--card);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+        .gallery-item .img-placeholder {
+            height: 180px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #fff;
+        }
+        .gallery-item .caption { padding: 12px; font-weight: 700; }
+
+        /* ===== شرح المنتج ===== */
+        .explain-box {
+            background: var(--card);
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+        .explain-box h3 { color: var(--primary); margin-bottom: 10px; }
+        .explain-box ul { padding-right: 20px; }
+        .explain-box ul li { padding: 6px 0; color: var(--text-light); }
+        .explain-box ul li i { color: var(--success); margin-left: 8px; }
+
+        /* ===== شهادات العملاء ===== */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .testimonial-card {
+            background: var(--card);
+            padding: 25px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+        .testimonial-card .stars { color: var(--gold); font-size: 1.2rem; margin-bottom: 8px; }
+        .testimonial-card p { color: var(--text-light); font-size: 0.95rem; font-style: italic; }
+        .testimonial-card .name { font-weight: 700; margin-top: 10px; color: var(--primary); }
+
+        /* ===== الأسئلة الشائعة ===== */
+        .faq-item {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        .faq-item .question {
+            padding: 15px 20px;
+            cursor: pointer;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg);
+            transition: 0.3s;
+        }
+        .faq-item .question:hover { background: var(--primary); color: #fff; }
+        .faq-item .answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: 0.3s;
+            color: var(--text-light);
+        }
+        .faq-item.active .answer { padding: 15px 20px; max-height: 200px; }
+        .faq-item.active .question i { transform: rotate(180deg); }
+
+        /* ===== طرق الدفع ===== */
         .payment-icons {
             display: flex;
             justify-content: center;
@@ -249,7 +335,7 @@
         .payment-item.wallet i { color: var(--gold); }
         .payment-item.whatsapp-pay i { color: var(--whatsapp); }
 
-        /* ===== الباقات ===== */
+        /* ===== الباقات (كل زر يفتح واتساب برسالة جاهزة) ===== */
         .pricing-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -360,7 +446,7 @@
 </head>
 <body>
 
-    <!-- ===== شريط الإعلانات مع الرقم واضح ===== -->
+    <!-- ===== شريط الإعلانات ===== -->
     <div class="announcement">
         <i class="fab fa-whatsapp whatsapp-icon"></i>
         تواصل مباشر على واتساب:
@@ -369,7 +455,7 @@
         🔥 عرض خاص: خصم 50% لفترة محدودة!
     </div>
 
-    <!-- ===== الهيدر مع زر واتساب ===== -->
+    <!-- ===== الهيدر ===== -->
     <header>
         <div class="logo"><i class="fas fa-store"></i> متجري</div>
         <div class="header-btns">
@@ -391,7 +477,6 @@
             </div>
             <br>
             <div class="hero-btns">
-                <!-- زر الشراء يفتح واتساب مباشر -->
                 <a href="https://wa.me/201112876080?text=مرحباً!%20أريد%20شراء%20نظام%20المتجر%20الإلكتروني%20بسعر%20199%20جنيه" target="_blank" class="btn-buy-hero">
                     <i class="fab fa-whatsapp"></i> اشتري الآن - 199 ج.م
                 </a>
@@ -465,7 +550,7 @@
         </div>
     </section>
 
-    <!-- ===== طرق الدفع (الرقم واضح جداً) ===== -->
+    <!-- ===== طرق الدفع ===== -->
     <section class="section" style="background:var(--bg);">
         <div class="container">
             <h2 class="section-title">💳 <span>طرق</span> الدفع</h2>
@@ -498,7 +583,7 @@
         </div>
     </section>
 
-    <!-- ===== الباقات (كل زر يفتح واتساب مباشر) ===== -->
+    <!-- ===== الباقات ===== -->
     <section class="section" id="pricing">
         <div class="container">
             <h2 class="section-title">💎 <span>اختر</span> الباقة</h2>
@@ -580,7 +665,7 @@
         </div>
     </section>
 
-    <!-- ===== الفوتر مع الرقم ===== -->
+    <!-- ===== الفوتر ===== -->
     <footer class="footer">
         <div class="container">
             <p>&copy; 2026 متجري. جميع الحقوق محفوظة.</p>
