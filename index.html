@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>متجر إلكتروني متكامل - اشترِ الآن</title>
+    <title>متجر إلكتروني متكامل - نظام احترافي للبيع أونلاين</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <style>
+        /* ===== كل الـ CSS (نفسه) ===== */
         :root {
             --primary: #4f46e5;
             --primary-dark: #4338ca;
@@ -79,6 +80,20 @@
             margin: 5px;
         }
         .btn-demo:hover { background: rgba(255,255,255,0.3); transform: translateY(-2px); }
+        .btn-buy {
+            background: var(--gold);
+            color: #000;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-buy:hover { background: #d98e16; transform: translateY(-2px); }
 
         /* ===== الأقسام ===== */
         .section { padding: 50px 0; }
@@ -134,6 +149,20 @@
         }
         .gallery-item .caption { padding: 12px; font-weight: 700; }
 
+        /* ===== شرح المنتج ===== */
+        .explain-box {
+            background: var(--card);
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        .explain-box h3 { color: var(--primary); margin-bottom: 10px; }
+        .explain-box ul { padding-right: 20px; }
+        .explain-box ul li { padding: 6px 0; color: var(--text-light); }
+        .explain-box ul li i { color: var(--success); margin-left: 8px; }
+
         /* ===== الباقات ===== */
         .pricing-grid {
             display: grid;
@@ -173,7 +202,7 @@
         .pricing-card ul { list-style: none; margin: 15px 0; text-align: right; }
         .pricing-card ul li { padding: 6px 0; color: var(--text-light); }
         .pricing-card ul li i { color: var(--success); margin-left: 8px; }
-        .btn-buy {
+        .btn-buy-now {
             background: var(--primary);
             color: #fff;
             border: none;
@@ -187,9 +216,9 @@
             display: inline-block;
             width: 100%;
         }
-        .btn-buy:hover { background: var(--primary-dark); transform: translateY(-2px); }
-        .btn-buy.whatsapp { background: #25d366; }
-        .btn-buy.whatsapp:hover { background: #1eb954; }
+        .btn-buy-now:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        .btn-buy-now.whatsapp { background: #25d366; }
+        .btn-buy-now.whatsapp:hover { background: #1eb954; }
 
         /* ===== الضمان ===== */
         .guarantee {
@@ -262,6 +291,7 @@
             .hero h1 { font-size: 1.8rem; }
             .pricing-card.featured { transform: none; }
             .pricing-card.featured:hover { transform: translateY(-5px); }
+            .explain-box { padding: 20px; }
         }
     </style>
 </head>
@@ -286,7 +316,7 @@
             </div>
             <br>
             <div>
-                <a href="#pricing" class="btn-buy" style="width:auto; padding:14px 40px; background:var(--gold); color:#000; font-size:1.1rem; display:inline-block;">اشتري الآن</a>
+                <a href="#pricing" class="btn-buy">اشتري الآن</a>
                 <br><br>
                 <a href="https://mostafatifa1122-eng.github.io/sotry/" target="_blank" class="btn-demo">
                     <i class="fas fa-external-link-alt"></i> 🖥️ جرب المتجر بنفسك
@@ -334,8 +364,66 @@
         </div>
     </section>
 
-    <!-- ===== معرض الصور ===== -->
+    <!-- ===== شرح المنتج بالتفصيل ===== -->
     <section class="section" style="background:var(--bg);">
+        <div class="container">
+            <h2 class="section-title">📖 <span>شرح</span> المنتج</h2>
+            
+            <div class="explain-box">
+                <h3><i class="fas fa-store"></i> ما هو هذا المنتج؟</h3>
+                <p>نظام متجر إلكتروني متكامل يمكنك من بيع منتجاتك بسهولة. كل ما تحتاجه هو ملف واحد (index.html) ترفعه على أي استضافة، ويصبح لديك متجر احترافي.</p>
+            </div>
+
+            <div class="explain-box">
+                <h3><i class="fas fa-cogs"></i> لوحة التحكم</h3>
+                <p>لوحة تحكم كاملة تتيح لك:</p>
+                <ul>
+                    <li><i class="fas fa-check"></i> إضافة منتجات جديدة (اسم - سعر - كمية - صورة)</li>
+                    <li><i class="fas fa-check"></i> حذف المنتجات</li>
+                    <li><i class="fas fa-check"></i> متابعة الطلبات</li>
+                    <li><i class="fas fa-check"></i> تغيير اسم المتجر</li>
+                    <li><i class="fas fa-check"></i> إعداد رقم واتساب لاستلام الطلبات</li>
+                    <li><i class="fas fa-check"></i> ربط Firebase للتزامن بين الأجهزة</li>
+                    <li><i class="fas fa-check"></i> تصدير واستيراد البيانات</li>
+                </ul>
+            </div>
+
+            <div class="explain-box">
+                <h3><i class="fas fa-shopping-cart"></i> واجهة المتجر</h3>
+                <p>واجهة المتجر تحتوي على:</p>
+                <ul>
+                    <li><i class="fas fa-check"></i> عرض المنتجات بالصور</li>
+                    <li><i class="fas fa-check"></i> سلة مشتريات</li>
+                    <li><i class="fas fa-check"></i> إتمام الطلبات عبر واتساب</li>
+                    <li><i class="fas fa-check"></i> البحث عن المنتجات</li>
+                    <li><i class="fas fa-check"></i> تتبع الطلبات</li>
+                </ul>
+            </div>
+
+            <div class="explain-box">
+                <h3><i class="fas fa-cloud"></i> التزامن السحابي (Firebase)</h3>
+                <p>يمكنك ربط المتجر بقاعدة بيانات Firebase لتزامن البيانات بين جميع الأجهزة:</p>
+                <ul>
+                    <li><i class="fas fa-check"></i> المنتجات تظهر على كل الأجهزة</li>
+                    <li><i class="fas fa-check"></i> الطلبات تتزامن</li>
+                    <li><i class="fas fa-check"></i> بيانات آمنة في السحابة</li>
+                </ul>
+            </div>
+
+            <div class="explain-box">
+                <h3><i class="fas fa-mobile-alt"></i> يعمل على كل الأجهزة</h3>
+                <p>المتجر متجاوب تماماً مع:</p>
+                <ul>
+                    <li><i class="fas fa-check"></i> الكمبيوتر</li>
+                    <li><i class="fas fa-check"></i> الموبايل</li>
+                    <li><i class="fas fa-check"></i> التابلت</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== معرض الصور ===== -->
+    <section class="section">
         <div class="container">
             <h2 class="section-title">📸 <span>واجهات</span> المنتج</h2>
             <div class="gallery-grid">
@@ -355,30 +443,41 @@
                     <div class="img-placeholder"><i class="fas fa-cloud"></i></div>
                     <div class="caption">إعدادات التزامن السحابي</div>
                 </div>
+                <div class="gallery-item">
+                    <div class="img-placeholder"><i class="fas fa-edit"></i></div>
+                    <div class="caption">إضافة منتج جديد</div>
+                </div>
+                <div class="gallery-item">
+                    <div class="img-placeholder"><i class="fas fa-file-export"></i></div>
+                    <div class="caption">تصدير واستيراد البيانات</div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- ===== الباقات ===== -->
-    <section class="section" id="pricing">
+    <!-- ===== الباقات (مع تعديل السعر) ===== -->
+    <section class="section" id="pricing" style="background:var(--bg);">
         <div class="container">
             <h2 class="section-title">💎 <span>اختر</span> الباقة</h2>
             <div class="pricing-grid">
+                <!-- الباقة الأساسية (99 ج.م) -->
                 <div class="pricing-card">
                     <h3>الباقة الأساسية</h3>
                     <div>
-                        <span class="old-price">300 ج.م</span>
-                        <div class="price">149 <span>ج.م</span></div>
+                        <span class="old-price">200 ج.م</span>
+                        <div class="price">99 <span>ج.م</span></div>
                     </div>
                     <ul>
                         <li><i class="fas fa-check"></i> نظام المتجر الكامل</li>
                         <li><i class="fas fa-check"></i> لوحة تحكم المدير</li>
                         <li><i class="fas fa-check"></i> دفع عبر واتساب</li>
                         <li><i class="fas fa-check"></i> يعمل على كل الأجهزة</li>
+                        <li><i class="fas fa-check"></i> تصدير واستيراد البيانات</li>
                     </ul>
-                    <a href="#" class="btn-buy whatsapp" onclick="openPhonePopup()"><i class="fab fa-whatsapp"></i> اطلب عبر واتساب</a>
+                    <a href="#" class="btn-buy-now whatsapp" onclick="openPhonePopup()"><i class="fab fa-whatsapp"></i> اطلب عبر واتساب</a>
                 </div>
 
+                <!-- الباقة الاحترافية (199 ج.م) -->
                 <div class="pricing-card featured">
                     <div class="badge"><i class="fas fa-star"></i> الأكثر مبيعاً</div>
                     <h3>الباقة الاحترافية</h3>
@@ -389,13 +488,14 @@
                     <ul>
                         <li><i class="fas fa-check"></i> كل مميزات الأساسية</li>
                         <li><i class="fas fa-check"></i> تزامن Firebase</li>
-                        <li><i class="fas fa-check"></i> تصدير واستيراد البيانات</li>
                         <li><i class="fas fa-check"></i> دعم فني لمدة أسبوع</li>
                         <li><i class="fas fa-check"></i> فيديو شرح كامل</li>
+                        <li><i class="fas fa-check"></i> تخصيص اسم المتجر</li>
                     </ul>
-                    <a href="#" class="btn-buy whatsapp" onclick="openPhonePopup()"><i class="fab fa-whatsapp"></i> اطلب عبر واتساب</a>
+                    <a href="#" class="btn-buy-now whatsapp" onclick="openPhonePopup()"><i class="fab fa-whatsapp"></i> اطلب عبر واتساب</a>
                 </div>
 
+                <!-- الباقة الممتازة (299 ج.م) -->
                 <div class="pricing-card">
                     <h3>الباقة الممتازة</h3>
                     <div>
@@ -409,14 +509,14 @@
                         <li><i class="fas fa-check"></i> تخصيص النظام حسب طلبك</li>
                         <li><i class="fas fa-check"></i> تركيب الموقع على استضافتك</li>
                     </ul>
-                    <a href="#" class="btn-buy whatsapp" onclick="openPhonePopup()"><i class="fab fa-whatsapp"></i> اطلب عبر واتساب</a>
+                    <a href="#" class="btn-buy-now whatsapp" onclick="openPhonePopup()"><i class="fab fa-whatsapp"></i> اطلب عبر واتساب</a>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- ===== الضمان ===== -->
-    <section class="section" style="background:var(--bg);">
+    <section class="section">
         <div class="container">
             <div class="guarantee">
                 <i class="fas fa-shield-alt"></i>
@@ -449,7 +549,7 @@
             <p>ضع رقم هاتفك المحمول (مع كود الدولة) عشان نقدر نتواصل معاك</p>
             <input type="text" id="userPhone" placeholder="مثال: 201112876080" dir="ltr" />
             <div>
-                <button class="btn-buy whatsapp" onclick="submitPhone()" style="width:auto; padding:10px 30px;"><i class="fab fa-whatsapp"></i> تواصل الآن</button>
+                <button class="btn-buy-now whatsapp" onclick="submitPhone()" style="width:auto; padding:10px 30px;"><i class="fab fa-whatsapp"></i> تواصل الآن</button>
                 <button class="btn-close" onclick="closePhonePopup()">إلغاء</button>
             </div>
             <p style="margin-top:10px; font-size:0.8rem; color:var(--text-light);">الرقم هيستخدم للتواصل معاك فقط</p>
