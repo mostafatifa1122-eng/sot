@@ -35,12 +35,22 @@
             background: var(--primary);
             color: #fff;
             text-align: center;
-            padding: 10px;
+            padding: 12px;
             font-weight: 700;
-            font-size: 0.95rem;
+            font-size: 1rem;
         }
-        .announcement span { color: var(--gold); }
-        .announcement .phone { color: var(--gold); font-size: 1.1rem; }
+        .announcement .phone-number {
+            color: var(--gold);
+            font-size: 1.3rem;
+            font-weight: 900;
+            direction: ltr;
+            display: inline-block;
+            background: rgba(255,255,255,0.1);
+            padding: 2px 15px;
+            border-radius: 20px;
+            margin: 0 5px;
+        }
+        .announcement .whatsapp-icon { color: var(--whatsapp); margin: 0 5px; }
 
         /* ===== الهيدر ===== */
         header {
@@ -58,16 +68,19 @@
         .btn-whatsapp-header {
             background: var(--whatsapp);
             color: #fff;
-            padding: 8px 18px;
-            border-radius: 8px;
+            padding: 10px 20px;
+            border-radius: 10px;
             text-decoration: none;
             font-weight: 700;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            font-size: 0.9rem;
+            gap: 8px;
+            font-size: 1rem;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(37,211,102,0.3);
         }
-        .btn-whatsapp-header:hover { opacity: 0.9; transform: scale(1.02); }
+        .btn-whatsapp-header:hover { transform: scale(1.05); opacity: 0.9; }
+        .btn-whatsapp-header .phone-big { font-size: 1.2rem; direction: ltr; }
 
         /* ===== الهيرو ===== */
         .hero {
@@ -108,6 +121,26 @@
         .hero .price-tag span { color: var(--gold); }
         .hero .old-price { text-decoration: line-through; opacity: 0.6; font-size: 1.2rem; margin-left: 10px; }
 
+        /* ===== أزرار الهيرو ===== */
+        .hero-btns { position: relative; z-index: 2; }
+        .btn-buy-hero {
+            background: var(--gold);
+            color: #000;
+            border: none;
+            padding: 16px 50px;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 10px 25px rgba(245,166,35,0.4);
+            animation: pulse 2s infinite;
+        }
+        .btn-buy-hero:hover { background: var(--gold-hover); transform: translateY(-3px); }
+        .btn-buy-hero i { margin-left: 8px; }
+
         .btn-demo {
             display: inline-block;
             background: rgba(255,255,255,0.15);
@@ -119,27 +152,8 @@
             border: 2px solid rgba(255,255,255,0.3);
             transition: 0.3s;
             margin: 5px;
-            position: relative;
-            z-index: 2;
         }
         .btn-demo:hover { background: rgba(255,255,255,0.3); transform: translateY(-2px); }
-        .btn-buy {
-            background: var(--gold);
-            color: #000;
-            border: none;
-            padding: 14px 40px;
-            border-radius: 8px;
-            font-weight: 800;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: 0.3s;
-            text-decoration: none;
-            display: inline-block;
-            position: relative;
-            z-index: 2;
-            box-shadow: 0 10px 25px rgba(245,166,35,0.4);
-        }
-        .btn-buy:hover { background: var(--gold-hover); transform: translateY(-3px); }
 
         /* ===== العد التنازلي ===== */
         .timer-section {
@@ -198,91 +212,42 @@
         .feature-card h3 { font-size: 1.1rem; margin-bottom: 5px; }
         .feature-card p { color: var(--text-light); font-size: 0.9rem; }
 
-        /* ===== معرض الصور ===== */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        .gallery-item {
-            background: var(--card);
-            border-radius: var(--radius);
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            text-align: center;
-        }
-        .gallery-item .img-placeholder {
-            height: 180px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        /* ===== طرق الدفع (الرقم واضح) ===== */
+        .payment-icons {
             display: flex;
-            align-items: center;
             justify-content: center;
-            font-size: 3rem;
-            color: #fff;
+            gap: 25px;
+            flex-wrap: wrap;
+            margin: 20px 0;
         }
-        .gallery-item .caption { padding: 12px; font-weight: 700; }
-
-        /* ===== شرح المنتج ===== */
-        .explain-box {
-            background: var(--card);
-            padding: 30px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            margin-bottom: 20px;
-        }
-        .explain-box h3 { color: var(--primary); margin-bottom: 10px; }
-        .explain-box ul { padding-right: 20px; }
-        .explain-box ul li { padding: 6px 0; color: var(--text-light); }
-        .explain-box ul li i { color: var(--success); margin-left: 8px; }
-
-        /* ===== شهادات العملاء ===== */
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        .testimonial-card {
-            background: var(--card);
-            padding: 25px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
+        .payment-item {
             text-align: center;
-        }
-        .testimonial-card .stars { color: var(--gold); font-size: 1.2rem; margin-bottom: 8px; }
-        .testimonial-card p { color: var(--text-light); font-size: 0.95rem; font-style: italic; }
-        .testimonial-card .name { font-weight: 700; margin-top: 10px; color: var(--primary); }
-
-        /* ===== الأسئلة الشائعة ===== */
-        .faq-item {
             background: var(--card);
+            padding: 20px 30px;
+            border-radius: 12px;
             border: 1px solid var(--border);
-            border-radius: 10px;
-            margin-bottom: 10px;
-            overflow: hidden;
+            min-width: 140px;
+            transition: 0.3s;
         }
-        .faq-item .question {
-            padding: 15px 20px;
-            cursor: pointer;
-            font-weight: 700;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .payment-item:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
+        .payment-item i { font-size: 2.5rem; display: block; margin-bottom: 8px; }
+        .payment-item .pay-name { font-size: 0.95rem; font-weight: 700; color: var(--text); }
+        .payment-item .pay-number {
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: var(--gold);
+            direction: ltr;
             background: var(--bg);
-            transition: 0.3s;
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 5px;
+            border: 1px dashed var(--gold);
         }
-        .faq-item .question:hover { background: var(--primary); color: #fff; }
-        .faq-item .answer {
-            padding: 0 20px;
-            max-height: 0;
-            overflow: hidden;
-            transition: 0.3s;
-            color: var(--text-light);
-        }
-        .faq-item.active .answer { padding: 15px 20px; max-height: 200px; }
-        .faq-item.active .question i { transform: rotate(180deg); }
+        .payment-item.instapay i { color: var(--instapay); }
+        .payment-item.vodafone i { color: var(--vodafone); }
+        .payment-item.wallet i { color: var(--gold); }
+        .payment-item.whatsapp-pay i { color: var(--whatsapp); }
 
         /* ===== الباقات ===== */
         .pricing-grid {
@@ -323,12 +288,13 @@
         .pricing-card ul { list-style: none; margin: 15px 0; text-align: right; }
         .pricing-card ul li { padding: 6px 0; color: var(--text-light); }
         .pricing-card ul li i { color: var(--success); margin-left: 8px; }
+
         .btn-buy-now {
             background: var(--whatsapp);
             color: #fff;
             border: none;
-            padding: 12px 30px;
-            border-radius: 8px;
+            padding: 14px 30px;
+            border-radius: 10px;
             font-weight: 700;
             font-size: 1rem;
             cursor: pointer;
@@ -336,32 +302,10 @@
             text-decoration: none;
             display: inline-block;
             width: 100%;
+            box-shadow: 0 4px 15px rgba(37,211,102,0.3);
         }
         .btn-buy-now:hover { background: #1eb954; transform: translateY(-2px); }
-
-        /* ===== طرق الدفع ===== */
-        .payment-icons {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            flex-wrap: wrap;
-            margin: 20px 0;
-        }
-        .payment-item {
-            text-align: center;
-            background: var(--card);
-            padding: 15px 25px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            min-width: 120px;
-        }
-        .payment-item i { font-size: 2rem; display: block; margin-bottom: 5px; }
-        .payment-item .pay-name { font-size: 0.85rem; font-weight: 700; color: var(--text); }
-        .payment-item .pay-number { font-size: 0.85rem; color: var(--text-light); font-weight: 700; direction: ltr; }
-        .payment-item.instapay i { color: var(--instapay); }
-        .payment-item.vodafone i { color: var(--vodafone); }
-        .payment-item.wallet i { color: var(--gold); }
-        .payment-item.whatsapp-pay i { color: var(--whatsapp); }
+        .btn-buy-now i { margin-left: 8px; }
 
         /* ===== الضمان ===== */
         .guarantee {
@@ -385,51 +329,15 @@
             text-align: center;
         }
         .footer a { color: var(--gold); text-decoration: none; }
-        .footer .phone-footer { color: var(--gold); font-weight: 700; font-size: 1.1rem; }
-
-        /* ===== نافذة الشراء ===== */
-        .popup-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(5px);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-        }
-        .popup-overlay.active { display: flex; }
-        .popup-content {
-            background: var(--card);
-            padding: 30px;
-            border-radius: 20px;
-            max-width: 420px;
-            width: 90%;
-            text-align: center;
-        }
-        .popup-content h2 { margin-bottom: 10px; }
-        .popup-content p { color: var(--text-light); margin-bottom: 15px; }
-        .popup-content .phone-display {
-            background: var(--bg);
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 1.3rem;
+        .footer .phone-footer {
+            color: var(--gold);
             font-weight: 900;
-            color: var(--primary);
+            font-size: 1.4rem;
             direction: ltr;
-            margin-bottom: 15px;
-            border: 2px dashed var(--gold);
-        }
-        .popup-content .btn-close {
-            background: var(--danger);
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 700;
-            margin-right: 10px;
+            background: rgba(255,255,255,0.1);
+            padding: 4px 20px;
+            border-radius: 20px;
+            display: inline-block;
         }
 
         /* ===== تأثيرات ===== */
@@ -438,32 +346,36 @@
             50% { transform: scale(1.05); }
             100% { transform: scale(1); }
         }
-        .btn-buy { animation: pulse 2s infinite; }
 
         @media (max-width: 768px) {
             .hero h1 { font-size: 1.8rem; }
             .pricing-card.featured { transform: none; }
             .pricing-card.featured:hover { transform: translateY(-5px); }
-            .explain-box { padding: 20px; }
-            .payment-item { min-width: 100px; padding: 10px 15px; }
+            .payment-item { min-width: 100px; padding: 15px; }
+            .payment-item .pay-number { font-size: 1rem; }
+            .btn-whatsapp-header .phone-big { font-size: 0.9rem; }
+            .announcement .phone-number { font-size: 1rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- ===== شريط الإعلانات ===== -->
+    <!-- ===== شريط الإعلانات مع الرقم واضح ===== -->
     <div class="announcement">
-        📞 تواصل مباشر على واتساب: <span class="phone">01112876080</span>
+        <i class="fab fa-whatsapp whatsapp-icon"></i>
+        تواصل مباشر على واتساب:
+        <span class="phone-number">01112876080</span>
         <span style="margin: 0 10px;">|</span>
         🔥 عرض خاص: خصم 50% لفترة محدودة!
     </div>
 
-    <!-- ===== الهيدر ===== -->
+    <!-- ===== الهيدر مع زر واتساب ===== -->
     <header>
         <div class="logo"><i class="fas fa-store"></i> متجري</div>
         <div class="header-btns">
             <a href="https://wa.me/201112876080" target="_blank" class="btn-whatsapp-header">
-                <i class="fab fa-whatsapp"></i> 01112876080
+                <i class="fab fa-whatsapp"></i>
+                <span class="phone-big">01112876080</span>
             </a>
         </div>
     </header>
@@ -478,8 +390,11 @@
                 <span>199 ج.م</span>
             </div>
             <br>
-            <div>
-                <a href="#pricing" class="btn-buy">اشتري الآن</a>
+            <div class="hero-btns">
+                <!-- زر الشراء يفتح واتساب مباشر -->
+                <a href="https://wa.me/201112876080?text=مرحباً!%20أريد%20شراء%20نظام%20المتجر%20الإلكتروني%20بسعر%20199%20جنيه" target="_blank" class="btn-buy-hero">
+                    <i class="fab fa-whatsapp"></i> اشتري الآن - 199 ج.م
+                </a>
                 <br><br>
                 <a href="https://mostafatifa1122-eng.github.io/sotry/" target="_blank" class="btn-demo">
                     <i class="fas fa-external-link-alt"></i> 🖥️ جرب المتجر بنفسك
@@ -550,7 +465,7 @@
         </div>
     </section>
 
-    <!-- ===== طرق الدفع (مع الرقم) ===== -->
+    <!-- ===== طرق الدفع (الرقم واضح جداً) ===== -->
     <section class="section" style="background:var(--bg);">
         <div class="container">
             <h2 class="section-title">💳 <span>طرق</span> الدفع</h2>
@@ -567,7 +482,7 @@
                 </div>
                 <div class="payment-item wallet">
                     <i class="fas fa-wallet"></i>
-                    <div class="pay-name">محفظة</div>
+                    <div class="pay-name">محفظة إلكترونية</div>
                     <div class="pay-number">01112876080</div>
                 </div>
                 <div class="payment-item whatsapp-pay">
@@ -576,17 +491,19 @@
                     <div class="pay-number">01112876080</div>
                 </div>
             </div>
-            <p style="text-align:center; color:var(--text-light); font-size:0.9rem;">
-                <i class="fas fa-info-circle"></i> جميع طرق الدفع على نفس الرقم: <strong style="color:var(--primary);">01112876080</strong>
+            <p style="text-align:center; color:var(--text-light); font-size:1rem; margin-top:10px;">
+                <i class="fas fa-info-circle"></i> جميع طرق الدفع على نفس الرقم:
+                <strong style="color:var(--gold); font-size:1.3rem; direction:ltr; display:inline-block;">01112876080</strong>
             </p>
         </div>
     </section>
 
-    <!-- ===== الباقات ===== -->
+    <!-- ===== الباقات (كل زر يفتح واتساب مباشر) ===== -->
     <section class="section" id="pricing">
         <div class="container">
             <h2 class="section-title">💎 <span>اختر</span> الباقة</h2>
             <div class="pricing-grid">
+                <!-- الباقة الأساسية 99 ج.م -->
                 <div class="pricing-card">
                     <h3>الباقة الأساسية</h3>
                     <div>
@@ -601,10 +518,11 @@
                         <li><i class="fas fa-check"></i> تصدير واستيراد البيانات</li>
                     </ul>
                     <a href="https://wa.me/201112876080?text=مرحباً!%20أريد%20شراء%20الباقة%20الأساسية%20(99%20جنيه)" target="_blank" class="btn-buy-now">
-                        <i class="fab fa-whatsapp"></i> اطلب عبر واتساب
+                        <i class="fab fa-whatsapp"></i> اطلب الآن - 99 ج.م
                     </a>
                 </div>
 
+                <!-- الباقة الاحترافية 199 ج.م -->
                 <div class="pricing-card featured">
                     <div class="badge"><i class="fas fa-star"></i> الأكثر مبيعاً</div>
                     <h3>الباقة الاحترافية</h3>
@@ -620,10 +538,11 @@
                         <li><i class="fas fa-check"></i> تخصيص اسم المتجر</li>
                     </ul>
                     <a href="https://wa.me/201112876080?text=مرحباً!%20أريد%20شراء%20الباقة%20الاحترافية%20(199%20جنيه)" target="_blank" class="btn-buy-now">
-                        <i class="fab fa-whatsapp"></i> اطلب عبر واتساب
+                        <i class="fab fa-whatsapp"></i> اطلب الآن - 199 ج.م
                     </a>
                 </div>
 
+                <!-- الباقة الممتازة 299 ج.م -->
                 <div class="pricing-card">
                     <h3>الباقة الممتازة</h3>
                     <div>
@@ -638,7 +557,7 @@
                         <li><i class="fas fa-check"></i> تركيب الموقع على استضافتك</li>
                     </ul>
                     <a href="https://wa.me/201112876080?text=مرحباً!%20أريد%20شراء%20الباقة%20الممتازة%20(299%20جنيه)" target="_blank" class="btn-buy-now">
-                        <i class="fab fa-whatsapp"></i> اطلب عبر واتساب
+                        <i class="fab fa-whatsapp"></i> اطلب الآن - 299 ج.م
                     </a>
                 </div>
             </div>
@@ -661,13 +580,16 @@
         </div>
     </section>
 
-    <!-- ===== الفوتر ===== -->
+    <!-- ===== الفوتر مع الرقم ===== -->
     <footer class="footer">
         <div class="container">
             <p>&copy; 2026 متجري. جميع الحقوق محفوظة.</p>
-            <p>
-                🖥️ <a href="https://mostafatifa1122-eng.github.io/sotry/" target="_blank">جرب المتجر بنفسك</a> | 
-                📞 <span class="phone-footer">01112876080</span>
+            <p style="margin-top:10px;">
+                📞 للتواصل المباشر:
+                <span class="phone-footer">01112876080</span>
+            </p>
+            <p style="margin-top:8px;">
+                🖥️ <a href="https://mostafatifa1122-eng.github.io/sotry/" target="_blank">جرب المتجر بنفسك</a>
             </p>
         </div>
     </footer>
