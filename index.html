@@ -7,25 +7,36 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <style>
-        /* ===== كل الـ CSS (نفسه) ===== */
         :root {
-            --primary: #4f46e5;
-            --primary-dark: #4338ca;
-            --secondary: #06b6d4;
-            --bg: #f8fafc;
-            --card: #ffffff;
-            --text: #1e293b;
-            --text-light: #64748b;
+            --primary: #1b4d3e;
+            --primary-dark: #0f3329;
+            --primary-light: #2c7a62;
             --gold: #f5a623;
-            --success: #10b981;
-            --danger: #ef4444;
-            --radius: 16px;
+            --gold-hover: #d98e16;
+            --bg: #f8faf9;
+            --card: #ffffff;
+            --text: #0f172a;
+            --text-light: #64748b;
+            --danger: #e11d48;
+            --success: #16a34a;
+            --border: #e2e8f0;
             --shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
         body { background: var(--bg); color: var(--text); }
 
         .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+        /* ===== شريط الإعلانات ===== */
+        .announcement {
+            background: var(--danger);
+            color: #fff;
+            text-align: center;
+            padding: 8px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        .announcement span { color: var(--gold); }
 
         /* ===== الهيدر ===== */
         header {
@@ -45,15 +56,28 @@
 
         /* ===== الهيرو ===== */
         .hero {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
             color: #fff;
             padding: 60px 20px;
             text-align: center;
             border-radius: 0 0 30px 30px;
+            position: relative;
+            overflow: hidden;
         }
-        .hero h1 { font-size: 2.5rem; font-weight: 900; margin-bottom: 10px; }
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120%;
+            height: 100px;
+            background: var(--bg);
+            border-radius: 50% 50% 0 0;
+        }
+        .hero h1 { font-size: 2.5rem; font-weight: 900; margin-bottom: 10px; position: relative; z-index: 2; }
         .hero h1 span { color: var(--gold); }
-        .hero p { font-size: 1.1rem; opacity: 0.9; max-width: 600px; margin: 0 auto 20px; }
+        .hero p { font-size: 1.1rem; opacity: 0.9; max-width: 600px; margin: 0 auto 20px; position: relative; z-index: 2; }
         .hero .price-tag {
             display: inline-block;
             background: rgba(255,255,255,0.15);
@@ -63,6 +87,8 @@
             font-weight: 900;
             border: 2px solid var(--gold);
             margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
         }
         .hero .price-tag span { color: var(--gold); }
         .hero .old-price { text-decoration: line-through; opacity: 0.6; font-size: 1.2rem; margin-left: 10px; }
@@ -78,6 +104,8 @@
             border: 2px solid rgba(255,255,255,0.3);
             transition: 0.3s;
             margin: 5px;
+            position: relative;
+            z-index: 2;
         }
         .btn-demo:hover { background: rgba(255,255,255,0.3); transform: translateY(-2px); }
         .btn-buy {
@@ -92,8 +120,39 @@
             transition: 0.3s;
             text-decoration: none;
             display: inline-block;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 10px 25px rgba(245,166,35,0.4);
         }
-        .btn-buy:hover { background: #d98e16; transform: translateY(-2px); }
+        .btn-buy:hover { background: var(--gold-hover); transform: translateY(-3px); }
+
+        /* ===== العد التنازلي ===== */
+        .timer-section {
+            background: var(--card);
+            padding: 20px;
+            border-radius: 16px;
+            margin: -30px auto 30px;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            position: relative;
+            z-index: 10;
+        }
+        .timer-section h3 { font-size: 1rem; color: var(--text-light); margin-bottom: 10px; }
+        .timer-box { display: flex; justify-content: center; gap: 15px; }
+        .time-item { text-align: center; }
+        .time-item .num {
+            display: block;
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--danger);
+            background: var(--bg);
+            padding: 8px 12px;
+            border-radius: 8px;
+            min-width: 50px;
+        }
+        .time-item .label { font-size: 0.7rem; color: var(--text-light); margin-top: 3px; display: block; }
 
         /* ===== الأقسام ===== */
         .section { padding: 50px 0; }
@@ -116,7 +175,7 @@
             border-radius: var(--radius);
             text-align: center;
             box-shadow: var(--shadow);
-            border: 1px solid rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
             transition: 0.3s;
         }
         .feature-card:hover { transform: translateY(-5px); }
@@ -135,12 +194,12 @@
             border-radius: var(--radius);
             overflow: hidden;
             box-shadow: var(--shadow);
-            border: 1px solid rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
             text-align: center;
         }
         .gallery-item .img-placeholder {
             height: 180px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
             display: flex;
             align-items: center;
             justify-content: center;
@@ -155,13 +214,60 @@
             padding: 30px;
             border-radius: var(--radius);
             box-shadow: var(--shadow);
-            border: 1px solid rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
             margin-bottom: 20px;
         }
         .explain-box h3 { color: var(--primary); margin-bottom: 10px; }
         .explain-box ul { padding-right: 20px; }
         .explain-box ul li { padding: 6px 0; color: var(--text-light); }
         .explain-box ul li i { color: var(--success); margin-left: 8px; }
+
+        /* ===== شهادات العملاء ===== */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .testimonial-card {
+            background: var(--card);
+            padding: 25px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+        .testimonial-card .stars { color: var(--gold); font-size: 1.2rem; margin-bottom: 8px; }
+        .testimonial-card p { color: var(--text-light); font-size: 0.95rem; font-style: italic; }
+        .testimonial-card .name { font-weight: 700; margin-top: 10px; color: var(--primary); }
+
+        /* ===== الأسئلة الشائعة ===== */
+        .faq-item {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        .faq-item .question {
+            padding: 15px 20px;
+            cursor: pointer;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg);
+            transition: 0.3s;
+        }
+        .faq-item .question:hover { background: var(--primary); color: #fff; }
+        .faq-item .answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: 0.3s;
+            color: var(--text-light);
+        }
+        .faq-item.active .answer { padding: 15px 20px; max-height: 200px; }
+        .faq-item.active .question i { transform: rotate(180deg); }
 
         /* ===== الباقات ===== */
         .pricing-grid {
@@ -177,7 +283,7 @@
             padding: 30px;
             text-align: center;
             box-shadow: var(--shadow);
-            border: 1px solid rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
             transition: 0.3s;
         }
         .pricing-card:hover { transform: translateY(-5px); }
@@ -203,7 +309,7 @@
         .pricing-card ul li { padding: 6px 0; color: var(--text-light); }
         .pricing-card ul li i { color: var(--success); margin-left: 8px; }
         .btn-buy-now {
-            background: var(--primary);
+            background: var(--whatsapp);
             color: #fff;
             border: none;
             padding: 12px 30px;
@@ -216,9 +322,17 @@
             display: inline-block;
             width: 100%;
         }
-        .btn-buy-now:hover { background: var(--primary-dark); transform: translateY(-2px); }
-        .btn-buy-now.whatsapp { background: #25d366; }
-        .btn-buy-now.whatsapp:hover { background: #1eb954; }
+        .btn-buy-now:hover { background: #1eb954; transform: translateY(-2px); }
+
+        /* ===== طرق الدفع ===== */
+        .payment-icons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        .payment-icons i { font-size: 2.5rem; color: var(--text-light); opacity: 0.7; }
 
         /* ===== الضمان ===== */
         .guarantee {
@@ -287,6 +401,14 @@
             margin-right: 10px;
         }
 
+        /* ===== تأثيرات ===== */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .btn-buy { animation: pulse 2s infinite; }
+
         @media (max-width: 768px) {
             .hero h1 { font-size: 1.8rem; }
             .pricing-card.featured { transform: none; }
@@ -296,6 +418,11 @@
     </style>
 </head>
 <body>
+
+    <!-- ===== شريط الإعلانات ===== -->
+    <div class="announcement">
+        🔥 عرض خاص: خصم 50% لفترة محدودة! <span>سارع بالحجز</span>
+    </div>
 
     <!-- ===== الهيدر ===== -->
     <header>
@@ -324,6 +451,29 @@
             </div>
         </div>
     </section>
+
+    <!-- ===== العد التنازلي ===== -->
+    <div class="timer-section">
+        <h3>⏰ ينتهي العرض خلال</h3>
+        <div class="timer-box">
+            <div class="time-item">
+                <span class="num" id="days">00</span>
+                <span class="label">يوم</span>
+            </div>
+            <div class="time-item">
+                <span class="num" id="hours">00</span>
+                <span class="label">ساعة</span>
+            </div>
+            <div class="time-item">
+                <span class="num" id="minutes">00</span>
+                <span class="label">دقيقة</span>
+            </div>
+            <div class="time-item">
+                <span class="num" id="seconds">00</span>
+                <span class="label">ثانية</span>
+            </div>
+        </div>
+    </div>
 
     <!-- ===== المميزات ===== -->
     <section class="section">
@@ -364,7 +514,7 @@
         </div>
     </section>
 
-    <!-- ===== شرح المنتج بالتفصيل ===== -->
+    <!-- ===== شرح المنتج ===== -->
     <section class="section" style="background:var(--bg);">
         <div class="container">
             <h2 class="section-title">📖 <span>شرح</span> المنتج</h2>
@@ -409,58 +559,77 @@
                     <li><i class="fas fa-check"></i> بيانات آمنة في السحابة</li>
                 </ul>
             </div>
-
-            <div class="explain-box">
-                <h3><i class="fas fa-mobile-alt"></i> يعمل على كل الأجهزة</h3>
-                <p>المتجر متجاوب تماماً مع:</p>
-                <ul>
-                    <li><i class="fas fa-check"></i> الكمبيوتر</li>
-                    <li><i class="fas fa-check"></i> الموبايل</li>
-                    <li><i class="fas fa-check"></i> التابلت</li>
-                </ul>
-            </div>
         </div>
     </section>
 
-    <!-- ===== معرض الصور ===== -->
+    <!-- ===== شهادات العملاء ===== -->
     <section class="section">
         <div class="container">
-            <h2 class="section-title">📸 <span>واجهات</span> المنتج</h2>
-            <div class="gallery-grid">
-                <div class="gallery-item">
-                    <div class="img-placeholder"><i class="fas fa-store"></i></div>
-                    <div class="caption">صفحة المتجر الرئيسية</div>
+            <h2 class="section-title">💬 <span>آراء</span> العملاء</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p>"أفضل نظام متجر استخدمته! سهل وبسيط وسعره مناسب جداً."</p>
+                    <div class="name">— أحمد السيد</div>
                 </div>
-                <div class="gallery-item">
-                    <div class="img-placeholder"><i class="fas fa-shopping-cart"></i></div>
-                    <div class="caption">سلة المشتريات</div>
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p>"لوحة التحكم سهلة جداً، قدرت أضيف منتجاتي في دقائق."</p>
+                    <div class="name">— سارة خالد</div>
                 </div>
-                <div class="gallery-item">
-                    <div class="img-placeholder"><i class="fas fa-cogs"></i></div>
-                    <div class="caption">لوحة التحكم</div>
-                </div>
-                <div class="gallery-item">
-                    <div class="img-placeholder"><i class="fas fa-cloud"></i></div>
-                    <div class="caption">إعدادات التزامن السحابي</div>
-                </div>
-                <div class="gallery-item">
-                    <div class="img-placeholder"><i class="fas fa-edit"></i></div>
-                    <div class="caption">إضافة منتج جديد</div>
-                </div>
-                <div class="gallery-item">
-                    <div class="img-placeholder"><i class="fas fa-file-export"></i></div>
-                    <div class="caption">تصدير واستيراد البيانات</div>
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p>"دعم فني ممتاز، وأنصح به أي حد عايز يبيع أونلاين."</p>
+                    <div class="name">— محمد علي</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ===== الباقات (مع تعديل السعر) ===== -->
-    <section class="section" id="pricing" style="background:var(--bg);">
+    <!-- ===== الأسئلة الشائعة ===== -->
+    <section class="section" style="background:var(--bg);">
+        <div class="container">
+            <h2 class="section-title">❓ <span>الأسئلة</span> الشائعة</h2>
+            
+            <div class="faq-item active">
+                <div class="question" onclick="toggleFaq(this)">
+                    <span>ما هو نظام المتجر الإلكتروني؟</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="answer">هو نظام متكامل لبيع المنتجات أونلاين، يحتوي على متجر لعرض المنتجات، سلة شراء، لوحة تحكم لإدارة المنتجات والطلبات.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question" onclick="toggleFaq(this)">
+                    <span>هل أحتاج خبرة تقنية لاستخدامه؟</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="answer">لا، النظام سهل الاستخدام ولا يحتاج أي خبرة تقنية. كل ما عليك هو رفع ملف واحد على الاستضافة وتبدأ.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question" onclick="toggleFaq(this)">
+                    <span>هل البيانات تتزامن بين الأجهزة؟</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="answer">نعم، يمكنك ربط النظام بـ Firebase لتزامن البيانات بين جميع الأجهزة تلقائياً.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question" onclick="toggleFaq(this)">
+                    <span>ماذا أحصل عند الشراء؟</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="answer">تحصل على ملف المتجر كامل، فيديو شرح، ودعم فني حسب الباقة المختارة.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== الباقات ===== -->
+    <section class="section" id="pricing">
         <div class="container">
             <h2 class="section-title">💎 <span>اختر</span> الباقة</h2>
             <div class="pricing-grid">
-                <!-- الباقة الأساسية (99 ج.م) -->
                 <div class="pricing-card">
                     <h3>الباقة الأساسية</h3>
                     <div>
@@ -474,10 +643,9 @@
                         <li><i class="fas fa-check"></i> يعمل على كل الأجهزة</li>
                         <li><i class="fas fa-check"></i> تصدير واستيراد البيانات</li>
                     </ul>
-                    <a href="#" class="btn-buy-now whatsapp" onclick="openPhonePopup()"><i class="fab fa-whatsapp"></i> اطلب عبر واتساب</a>
+                    <a href="#" class="btn-buy-now" onclick="openPhonePopup()"><i class="fab fa-whatsapp"></i> اطلب عبر واتساب</a>
                 </div>
 
-                <!-- الباقة الاحترافية (199 ج.م) -->
                 <div class="pricing-card featured">
                     <div class="badge"><i class="fas fa-star"></i> الأكثر مبيعاً</div>
                     <h3>الباقة الاحترافية</h3>
@@ -492,10 +660,9 @@
                         <li><i class="fas fa-check"></i> فيديو شرح كامل</li>
                         <li><i class="fas fa-check"></i> تخصيص اسم المتجر</li>
                     </ul>
-                    <a href="#" class="btn-buy-now whatsapp" onclick="openPhonePopup()"><i class="fab fa-whatsapp"></i> اطلب عبر واتساب</a>
+                    <a href="#" class="btn-buy-now" onclick="openPhonePopup()"><i class="fab fa-whatsapp"></i> اطلب عبر واتساب</a>
                 </div>
 
-                <!-- الباقة الممتازة (299 ج.م) -->
                 <div class="pricing-card">
                     <h3>الباقة الممتازة</h3>
                     <div>
@@ -509,14 +676,22 @@
                         <li><i class="fas fa-check"></i> تخصيص النظام حسب طلبك</li>
                         <li><i class="fas fa-check"></i> تركيب الموقع على استضافتك</li>
                     </ul>
-                    <a href="#" class="btn-buy-now whatsapp" onclick="openPhonePopup()"><i class="fab fa-whatsapp"></i> اطلب عبر واتساب</a>
+                    <a href="#" class="btn-buy-now" onclick="openPhonePopup()"><i class="fab fa-whatsapp"></i> اطلب عبر واتساب</a>
                 </div>
+            </div>
+
+            <!-- طرق الدفع -->
+            <div class="payment-icons">
+                <i class="fas fa-bolt" style="color: #6c3c9e;" title="إنستاباي"></i>
+                <i class="fas fa-mobile-alt" style="color: #e60000;" title="فودافون كاش"></i>
+                <i class="fas fa-wallet" style="color: var(--gold);" title="محفظة إلكترونية"></i>
+                <i class="fab fa-whatsapp" style="color: #25d366;" title="واتساب"></i>
             </div>
         </div>
     </section>
 
     <!-- ===== الضمان ===== -->
-    <section class="section">
+    <section class="section" style="background:var(--bg);">
         <div class="container">
             <div class="guarantee">
                 <i class="fas fa-shield-alt"></i>
@@ -549,7 +724,7 @@
             <p>ضع رقم هاتفك المحمول (مع كود الدولة) عشان نقدر نتواصل معاك</p>
             <input type="text" id="userPhone" placeholder="مثال: 201112876080" dir="ltr" />
             <div>
-                <button class="btn-buy-now whatsapp" onclick="submitPhone()" style="width:auto; padding:10px 30px;"><i class="fab fa-whatsapp"></i> تواصل الآن</button>
+                <button class="btn-buy-now" onclick="submitPhone()" style="width:auto; padding:10px 30px;"><i class="fab fa-whatsapp"></i> تواصل الآن</button>
                 <button class="btn-close" onclick="closePhonePopup()">إلغاء</button>
             </div>
             <p style="margin-top:10px; font-size:0.8rem; color:var(--text-light);">الرقم هيستخدم للتواصل معاك فقط</p>
@@ -557,6 +732,35 @@
     </div>
 
     <script>
+        // ===== العد التنازلي =====
+        function startCountdown() {
+            const target = new Date();
+            target.setDate(target.getDate() + 7);
+
+            const timer = setInterval(() => {
+                const now = new Date().getTime();
+                const distance = target - now;
+
+                if (distance < 0) {
+                    clearInterval(timer);
+                    document.querySelector('.timer-section').innerHTML = '<h3 style="color:var(--danger);">🔥 العرض انتهى!</h3>';
+                    return;
+                }
+
+                document.getElementById('days').textContent = String(Math.floor(distance / (1000 * 60 * 60 * 24))).padStart(2, '0');
+                document.getElementById('hours').textContent = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+                document.getElementById('minutes').textContent = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+                document.getElementById('seconds').textContent = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
+            }, 1000);
+        }
+        startCountdown();
+
+        // ===== الأسئلة الشائعة =====
+        function toggleFaq(element) {
+            const item = element.parentElement;
+            item.classList.toggle('active');
+        }
+
         // ===== نافذة رقم واتساب =====
         function openPhonePopup() {
             document.getElementById('phonePopup').classList.add('active');
@@ -578,7 +782,6 @@
             closePhonePopup();
         }
 
-        // ===== إغلاق النافذة بالضغط خارجها =====
         document.getElementById('phonePopup').addEventListener('click', function(e) {
             if (e.target === this) closePhonePopup();
         });
