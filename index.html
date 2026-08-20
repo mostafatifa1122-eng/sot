@@ -66,6 +66,20 @@
         .hero .price-tag span { color: var(--gold); }
         .hero .old-price { text-decoration: line-through; opacity: 0.6; font-size: 1.2rem; margin-left: 10px; }
 
+        .btn-demo {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+            padding: 14px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            border: 2px solid rgba(255,255,255,0.3);
+            transition: 0.3s;
+            margin: 5px;
+        }
+        .btn-demo:hover { background: rgba(255,255,255,0.3); transform: translateY(-2px); }
+
         /* ===== الأقسام ===== */
         .section { padding: 50px 0; }
         .section-title {
@@ -200,6 +214,50 @@
         }
         .footer a { color: var(--gold); text-decoration: none; }
 
+        /* ===== نافذة اختيار الرقم ===== */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        .popup-overlay.active { display: flex; }
+        .popup-content {
+            background: var(--card);
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 420px;
+            width: 90%;
+            text-align: center;
+        }
+        .popup-content h2 { margin-bottom: 10px; }
+        .popup-content p { color: var(--text-light); margin-bottom: 15px; }
+        .popup-content input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid rgba(0,0,0,0.12);
+            border-radius: 8px;
+            font-size: 1rem;
+            text-align: center;
+            direction: ltr;
+            margin-bottom: 15px;
+        }
+        .popup-content .btn-close {
+            background: var(--danger);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            margin-right: 10px;
+        }
+
         @media (max-width: 768px) {
             .hero h1 { font-size: 1.8rem; }
             .pricing-card.featured { transform: none; }
@@ -213,7 +271,7 @@
     <header>
         <div class="logo"><i class="fas fa-store"></i> متجري</div>
         <div class="header-btns">
-            <a href="https://wa.me/201112876080" target="_blank" class="btn-whatsapp"><i class="fab fa-whatsapp"></i> تواصل الآن</a>
+            <a href="#" class="btn-whatsapp" onclick="openPhonePopup()"><i class="fab fa-whatsapp"></i> تواصل الآن</a>
         </div>
     </header>
 
@@ -227,7 +285,13 @@
                 <span>199 ج.م</span>
             </div>
             <br>
-            <a href="#pricing" class="btn-buy" style="width:auto; padding:14px 40px; background:var(--gold); color:#000; font-size:1.1rem;">اشتري الآن</a>
+            <div>
+                <a href="#pricing" class="btn-buy" style="width:auto; padding:14px 40px; background:var(--gold); color:#000; font-size:1.1rem; display:inline-block;">اشتري الآن</a>
+                <br><br>
+                <a href="https://mostafatifa1122-eng.github.io/sotry/" target="_blank" class="btn-demo">
+                    <i class="fas fa-external-link-alt"></i> 🖥️ جرب المتجر بنفسك
+                </a>
+            </div>
         </div>
     </section>
 
@@ -312,7 +376,7 @@
                         <li><i class="fas fa-check"></i> دفع عبر واتساب</li>
                         <li><i class="fas fa-check"></i> يعمل على كل الأجهزة</li>
                     </ul>
-                    <a href="https://wa.me/201112876080?text=مرحباً!%20أريد%20شراء%20الباقة%20الأساسية" target="_blank" class="btn-buy whatsapp"><i class="fab fa-whatsapp"></i> اطلب عبر واتساب</a>
+                    <a href="#" class="btn-buy whatsapp" onclick="openPhonePopup()"><i class="fab fa-whatsapp"></i> اطلب عبر واتساب</a>
                 </div>
 
                 <div class="pricing-card featured">
@@ -329,7 +393,7 @@
                         <li><i class="fas fa-check"></i> دعم فني لمدة أسبوع</li>
                         <li><i class="fas fa-check"></i> فيديو شرح كامل</li>
                     </ul>
-                    <a href="https://wa.me/201112876080?text=مرحباً!%20أريد%20شراء%20الباقة%20الاحترافية" target="_blank" class="btn-buy whatsapp"><i class="fab fa-whatsapp"></i> اطلب عبر واتساب</a>
+                    <a href="#" class="btn-buy whatsapp" onclick="openPhonePopup()"><i class="fab fa-whatsapp"></i> اطلب عبر واتساب</a>
                 </div>
 
                 <div class="pricing-card">
@@ -345,7 +409,7 @@
                         <li><i class="fas fa-check"></i> تخصيص النظام حسب طلبك</li>
                         <li><i class="fas fa-check"></i> تركيب الموقع على استضافتك</li>
                     </ul>
-                    <a href="https://wa.me/201112876080?text=مرحباً!%20أريد%20شراء%20الباقة%20الممتازة" target="_blank" class="btn-buy whatsapp"><i class="fab fa-whatsapp"></i> اطلب عبر واتساب</a>
+                    <a href="#" class="btn-buy whatsapp" onclick="openPhonePopup()"><i class="fab fa-whatsapp"></i> اطلب عبر واتساب</a>
                 </div>
             </div>
         </div>
@@ -371,9 +435,54 @@
     <footer class="footer">
         <div class="container">
             <p>&copy; 2026 متجري. جميع الحقوق محفوظة.</p>
-            <p>للتواصل: <a href="https://wa.me/201112876080">01112876080</a></p>
+            <p>
+                🖥️ <a href="https://mostafatifa1122-eng.github.io/sotry/" target="_blank">جرب المتجر بنفسك</a> | 
+                📱 <a href="#" onclick="openPhonePopup()">للتواصل</a>
+            </p>
         </div>
     </footer>
+
+    <!-- ===== نافذة اختيار رقم واتساب ===== -->
+    <div class="popup-overlay" id="phonePopup">
+        <div class="popup-content">
+            <h2>📱 أدخل رقم واتسابك</h2>
+            <p>ضع رقم هاتفك المحمول (مع كود الدولة) عشان نقدر نتواصل معاك</p>
+            <input type="text" id="userPhone" placeholder="مثال: 201112876080" dir="ltr" />
+            <div>
+                <button class="btn-buy whatsapp" onclick="submitPhone()" style="width:auto; padding:10px 30px;"><i class="fab fa-whatsapp"></i> تواصل الآن</button>
+                <button class="btn-close" onclick="closePhonePopup()">إلغاء</button>
+            </div>
+            <p style="margin-top:10px; font-size:0.8rem; color:var(--text-light);">الرقم هيستخدم للتواصل معاك فقط</p>
+        </div>
+    </div>
+
+    <script>
+        // ===== نافذة رقم واتساب =====
+        function openPhonePopup() {
+            document.getElementById('phonePopup').classList.add('active');
+        }
+
+        function closePhonePopup() {
+            document.getElementById('phonePopup').classList.remove('active');
+            document.getElementById('userPhone').value = '';
+        }
+
+        function submitPhone() {
+            const phone = document.getElementById('userPhone').value.trim();
+            if (!phone || phone.length < 8) {
+                alert('❌ الرجاء إدخال رقم هاتف صحيح مع كود الدولة (مثال: 201112876080)');
+                return;
+            }
+            const url = `https://wa.me/${phone}`;
+            window.open(url, '_blank');
+            closePhonePopup();
+        }
+
+        // ===== إغلاق النافذة بالضغط خارجها =====
+        document.getElementById('phonePopup').addEventListener('click', function(e) {
+            if (e.target === this) closePhonePopup();
+        });
+    </script>
 
 </body>
 </html>
