@@ -19,6 +19,9 @@
             --text-light: #64748b;
             --danger: #e11d48;
             --success: #16a34a;
+            --whatsapp: #25d366;
+            --instapay: #6c3c9e;
+            --vodafone: #e60000;
             --border: #e2e8f0;
             --shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
         }
@@ -29,14 +32,15 @@
 
         /* ===== شريط الإعلانات ===== */
         .announcement {
-            background: var(--danger);
+            background: var(--primary);
             color: #fff;
             text-align: center;
-            padding: 8px;
+            padding: 10px;
             font-weight: 700;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
         }
         .announcement span { color: var(--gold); }
+        .announcement .phone { color: var(--gold); font-size: 1.1rem; }
 
         /* ===== الهيدر ===== */
         header {
@@ -51,8 +55,19 @@
         .logo { color: #fff; font-weight: 900; font-size: 1.3rem; display: flex; align-items: center; gap: 8px; }
         .logo i { color: var(--gold); }
         .header-btns { display: flex; gap: 10px; flex-wrap: wrap; }
-        .btn-whatsapp { background: #25d366; color: #fff; padding: 8px 18px; border-radius: 8px; text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; font-size: 0.9rem; }
-        .btn-whatsapp:hover { opacity: 0.9; }
+        .btn-whatsapp-header {
+            background: var(--whatsapp);
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+        }
+        .btn-whatsapp-header:hover { opacity: 0.9; transform: scale(1.02); }
 
         /* ===== الهيرو ===== */
         .hero {
@@ -328,11 +343,25 @@
         .payment-icons {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 25px;
             flex-wrap: wrap;
             margin: 20px 0;
         }
-        .payment-icons i { font-size: 2.5rem; color: var(--text-light); opacity: 0.7; }
+        .payment-item {
+            text-align: center;
+            background: var(--card);
+            padding: 15px 25px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            min-width: 120px;
+        }
+        .payment-item i { font-size: 2rem; display: block; margin-bottom: 5px; }
+        .payment-item .pay-name { font-size: 0.85rem; font-weight: 700; color: var(--text); }
+        .payment-item .pay-number { font-size: 0.85rem; color: var(--text-light); font-weight: 700; direction: ltr; }
+        .payment-item.instapay i { color: var(--instapay); }
+        .payment-item.vodafone i { color: var(--vodafone); }
+        .payment-item.wallet i { color: var(--gold); }
+        .payment-item.whatsapp-pay i { color: var(--whatsapp); }
 
         /* ===== الضمان ===== */
         .guarantee {
@@ -356,8 +385,9 @@
             text-align: center;
         }
         .footer a { color: var(--gold); text-decoration: none; }
+        .footer .phone-footer { color: var(--gold); font-weight: 700; font-size: 1.1rem; }
 
-        /* ===== نافذة اختيار الرقم ===== */
+        /* ===== نافذة الشراء ===== */
         .popup-overlay {
             display: none;
             position: fixed;
@@ -380,15 +410,16 @@
         }
         .popup-content h2 { margin-bottom: 10px; }
         .popup-content p { color: var(--text-light); margin-bottom: 15px; }
-        .popup-content input {
-            width: 100%;
+        .popup-content .phone-display {
+            background: var(--bg);
             padding: 12px;
-            border: 1px solid rgba(0,0,0,0.12);
-            border-radius: 8px;
-            font-size: 1rem;
-            text-align: center;
+            border-radius: 10px;
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: var(--primary);
             direction: ltr;
             margin-bottom: 15px;
+            border: 2px dashed var(--gold);
         }
         .popup-content .btn-close {
             background: var(--danger);
@@ -414,6 +445,7 @@
             .pricing-card.featured { transform: none; }
             .pricing-card.featured:hover { transform: translateY(-5px); }
             .explain-box { padding: 20px; }
+            .payment-item { min-width: 100px; padding: 10px 15px; }
         }
     </style>
 </head>
@@ -421,14 +453,18 @@
 
     <!-- ===== شريط الإعلانات ===== -->
     <div class="announcement">
-        🔥 عرض خاص: خصم 50% لفترة محدودة! <span>سارع بالحجز</span>
+        📞 تواصل مباشر على واتساب: <span class="phone">01112876080</span>
+        <span style="margin: 0 10px;">|</span>
+        🔥 عرض خاص: خصم 50% لفترة محدودة!
     </div>
 
     <!-- ===== الهيدر ===== -->
     <header>
         <div class="logo"><i class="fas fa-store"></i> متجري</div>
         <div class="header-btns">
-            <a href="#" class="btn-whatsapp" onclick="openPhonePopup()"><i class="fab fa-whatsapp"></i> تواصل الآن</a>
+            <a href="https://wa.me/201112876080" target="_blank" class="btn-whatsapp-header">
+                <i class="fab fa-whatsapp"></i> 01112876080
+            </a>
         </div>
     </header>
 
@@ -514,114 +550,35 @@
         </div>
     </section>
 
-    <!-- ===== شرح المنتج ===== -->
+    <!-- ===== طرق الدفع (مع الرقم) ===== -->
     <section class="section" style="background:var(--bg);">
         <div class="container">
-            <h2 class="section-title">📖 <span>شرح</span> المنتج</h2>
-            
-            <div class="explain-box">
-                <h3><i class="fas fa-store"></i> ما هو هذا المنتج؟</h3>
-                <p>نظام متجر إلكتروني متكامل يمكنك من بيع منتجاتك بسهولة. كل ما تحتاجه هو ملف واحد (index.html) ترفعه على أي استضافة، ويصبح لديك متجر احترافي.</p>
-            </div>
-
-            <div class="explain-box">
-                <h3><i class="fas fa-cogs"></i> لوحة التحكم</h3>
-                <p>لوحة تحكم كاملة تتيح لك:</p>
-                <ul>
-                    <li><i class="fas fa-check"></i> إضافة منتجات جديدة (اسم - سعر - كمية - صورة)</li>
-                    <li><i class="fas fa-check"></i> حذف المنتجات</li>
-                    <li><i class="fas fa-check"></i> متابعة الطلبات</li>
-                    <li><i class="fas fa-check"></i> تغيير اسم المتجر</li>
-                    <li><i class="fas fa-check"></i> إعداد رقم واتساب لاستلام الطلبات</li>
-                    <li><i class="fas fa-check"></i> ربط Firebase للتزامن بين الأجهزة</li>
-                    <li><i class="fas fa-check"></i> تصدير واستيراد البيانات</li>
-                </ul>
-            </div>
-
-            <div class="explain-box">
-                <h3><i class="fas fa-shopping-cart"></i> واجهة المتجر</h3>
-                <p>واجهة المتجر تحتوي على:</p>
-                <ul>
-                    <li><i class="fas fa-check"></i> عرض المنتجات بالصور</li>
-                    <li><i class="fas fa-check"></i> سلة مشتريات</li>
-                    <li><i class="fas fa-check"></i> إتمام الطلبات عبر واتساب</li>
-                    <li><i class="fas fa-check"></i> البحث عن المنتجات</li>
-                    <li><i class="fas fa-check"></i> تتبع الطلبات</li>
-                </ul>
-            </div>
-
-            <div class="explain-box">
-                <h3><i class="fas fa-cloud"></i> التزامن السحابي (Firebase)</h3>
-                <p>يمكنك ربط المتجر بقاعدة بيانات Firebase لتزامن البيانات بين جميع الأجهزة:</p>
-                <ul>
-                    <li><i class="fas fa-check"></i> المنتجات تظهر على كل الأجهزة</li>
-                    <li><i class="fas fa-check"></i> الطلبات تتزامن</li>
-                    <li><i class="fas fa-check"></i> بيانات آمنة في السحابة</li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===== شهادات العملاء ===== -->
-    <section class="section">
-        <div class="container">
-            <h2 class="section-title">💬 <span>آراء</span> العملاء</h2>
-            <div class="testimonials-grid">
-                <div class="testimonial-card">
-                    <div class="stars">★★★★★</div>
-                    <p>"أفضل نظام متجر استخدمته! سهل وبسيط وسعره مناسب جداً."</p>
-                    <div class="name">— أحمد السيد</div>
+            <h2 class="section-title">💳 <span>طرق</span> الدفع</h2>
+            <div class="payment-icons">
+                <div class="payment-item instapay">
+                    <i class="fas fa-bolt"></i>
+                    <div class="pay-name">إنستاباي</div>
+                    <div class="pay-number">01112876080</div>
                 </div>
-                <div class="testimonial-card">
-                    <div class="stars">★★★★★</div>
-                    <p>"لوحة التحكم سهلة جداً، قدرت أضيف منتجاتي في دقائق."</p>
-                    <div class="name">— سارة خالد</div>
+                <div class="payment-item vodafone">
+                    <i class="fas fa-mobile-alt"></i>
+                    <div class="pay-name">فودافون كاش</div>
+                    <div class="pay-number">01112876080</div>
                 </div>
-                <div class="testimonial-card">
-                    <div class="stars">★★★★★</div>
-                    <p>"دعم فني ممتاز، وأنصح به أي حد عايز يبيع أونلاين."</p>
-                    <div class="name">— محمد علي</div>
+                <div class="payment-item wallet">
+                    <i class="fas fa-wallet"></i>
+                    <div class="pay-name">محفظة</div>
+                    <div class="pay-number">01112876080</div>
+                </div>
+                <div class="payment-item whatsapp-pay">
+                    <i class="fab fa-whatsapp"></i>
+                    <div class="pay-name">واتساب</div>
+                    <div class="pay-number">01112876080</div>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- ===== الأسئلة الشائعة ===== -->
-    <section class="section" style="background:var(--bg);">
-        <div class="container">
-            <h2 class="section-title">❓ <span>الأسئلة</span> الشائعة</h2>
-            
-            <div class="faq-item active">
-                <div class="question" onclick="toggleFaq(this)">
-                    <span>ما هو نظام المتجر الإلكتروني؟</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="answer">هو نظام متكامل لبيع المنتجات أونلاين، يحتوي على متجر لعرض المنتجات، سلة شراء، لوحة تحكم لإدارة المنتجات والطلبات.</div>
-            </div>
-
-            <div class="faq-item">
-                <div class="question" onclick="toggleFaq(this)">
-                    <span>هل أحتاج خبرة تقنية لاستخدامه؟</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="answer">لا، النظام سهل الاستخدام ولا يحتاج أي خبرة تقنية. كل ما عليك هو رفع ملف واحد على الاستضافة وتبدأ.</div>
-            </div>
-
-            <div class="faq-item">
-                <div class="question" onclick="toggleFaq(this)">
-                    <span>هل البيانات تتزامن بين الأجهزة؟</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="answer">نعم، يمكنك ربط النظام بـ Firebase لتزامن البيانات بين جميع الأجهزة تلقائياً.</div>
-            </div>
-
-            <div class="faq-item">
-                <div class="question" onclick="toggleFaq(this)">
-                    <span>ماذا أحصل عند الشراء؟</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="answer">تحصل على ملف المتجر كامل، فيديو شرح، ودعم فني حسب الباقة المختارة.</div>
-            </div>
+            <p style="text-align:center; color:var(--text-light); font-size:0.9rem;">
+                <i class="fas fa-info-circle"></i> جميع طرق الدفع على نفس الرقم: <strong style="color:var(--primary);">01112876080</strong>
+            </p>
         </div>
     </section>
 
@@ -643,7 +600,9 @@
                         <li><i class="fas fa-check"></i> يعمل على كل الأجهزة</li>
                         <li><i class="fas fa-check"></i> تصدير واستيراد البيانات</li>
                     </ul>
-                    <a href="#" class="btn-buy-now" onclick="openPhonePopup()"><i class="fab fa-whatsapp"></i> اطلب عبر واتساب</a>
+                    <a href="https://wa.me/201112876080?text=مرحباً!%20أريد%20شراء%20الباقة%20الأساسية%20(99%20جنيه)" target="_blank" class="btn-buy-now">
+                        <i class="fab fa-whatsapp"></i> اطلب عبر واتساب
+                    </a>
                 </div>
 
                 <div class="pricing-card featured">
@@ -660,7 +619,9 @@
                         <li><i class="fas fa-check"></i> فيديو شرح كامل</li>
                         <li><i class="fas fa-check"></i> تخصيص اسم المتجر</li>
                     </ul>
-                    <a href="#" class="btn-buy-now" onclick="openPhonePopup()"><i class="fab fa-whatsapp"></i> اطلب عبر واتساب</a>
+                    <a href="https://wa.me/201112876080?text=مرحباً!%20أريد%20شراء%20الباقة%20الاحترافية%20(199%20جنيه)" target="_blank" class="btn-buy-now">
+                        <i class="fab fa-whatsapp"></i> اطلب عبر واتساب
+                    </a>
                 </div>
 
                 <div class="pricing-card">
@@ -676,16 +637,10 @@
                         <li><i class="fas fa-check"></i> تخصيص النظام حسب طلبك</li>
                         <li><i class="fas fa-check"></i> تركيب الموقع على استضافتك</li>
                     </ul>
-                    <a href="#" class="btn-buy-now" onclick="openPhonePopup()"><i class="fab fa-whatsapp"></i> اطلب عبر واتساب</a>
+                    <a href="https://wa.me/201112876080?text=مرحباً!%20أريد%20شراء%20الباقة%20الممتازة%20(299%20جنيه)" target="_blank" class="btn-buy-now">
+                        <i class="fab fa-whatsapp"></i> اطلب عبر واتساب
+                    </a>
                 </div>
-            </div>
-
-            <!-- طرق الدفع -->
-            <div class="payment-icons">
-                <i class="fas fa-bolt" style="color: #6c3c9e;" title="إنستاباي"></i>
-                <i class="fas fa-mobile-alt" style="color: #e60000;" title="فودافون كاش"></i>
-                <i class="fas fa-wallet" style="color: var(--gold);" title="محفظة إلكترونية"></i>
-                <i class="fab fa-whatsapp" style="color: #25d366;" title="واتساب"></i>
             </div>
         </div>
     </section>
@@ -712,24 +667,10 @@
             <p>&copy; 2026 متجري. جميع الحقوق محفوظة.</p>
             <p>
                 🖥️ <a href="https://mostafatifa1122-eng.github.io/sotry/" target="_blank">جرب المتجر بنفسك</a> | 
-                📱 <a href="#" onclick="openPhonePopup()">للتواصل</a>
+                📞 <span class="phone-footer">01112876080</span>
             </p>
         </div>
     </footer>
-
-    <!-- ===== نافذة اختيار رقم واتساب ===== -->
-    <div class="popup-overlay" id="phonePopup">
-        <div class="popup-content">
-            <h2>📱 أدخل رقم واتسابك</h2>
-            <p>ضع رقم هاتفك المحمول (مع كود الدولة) عشان نقدر نتواصل معاك</p>
-            <input type="text" id="userPhone" placeholder="مثال: 201112876080" dir="ltr" />
-            <div>
-                <button class="btn-buy-now" onclick="submitPhone()" style="width:auto; padding:10px 30px;"><i class="fab fa-whatsapp"></i> تواصل الآن</button>
-                <button class="btn-close" onclick="closePhonePopup()">إلغاء</button>
-            </div>
-            <p style="margin-top:10px; font-size:0.8rem; color:var(--text-light);">الرقم هيستخدم للتواصل معاك فقط</p>
-        </div>
-    </div>
 
     <script>
         // ===== العد التنازلي =====
@@ -754,37 +695,6 @@
             }, 1000);
         }
         startCountdown();
-
-        // ===== الأسئلة الشائعة =====
-        function toggleFaq(element) {
-            const item = element.parentElement;
-            item.classList.toggle('active');
-        }
-
-        // ===== نافذة رقم واتساب =====
-        function openPhonePopup() {
-            document.getElementById('phonePopup').classList.add('active');
-        }
-
-        function closePhonePopup() {
-            document.getElementById('phonePopup').classList.remove('active');
-            document.getElementById('userPhone').value = '';
-        }
-
-        function submitPhone() {
-            const phone = document.getElementById('userPhone').value.trim();
-            if (!phone || phone.length < 8) {
-                alert('❌ الرجاء إدخال رقم هاتف صحيح مع كود الدولة (مثال: 201112876080)');
-                return;
-            }
-            const url = `https://wa.me/${phone}`;
-            window.open(url, '_blank');
-            closePhonePopup();
-        }
-
-        document.getElementById('phonePopup').addEventListener('click', function(e) {
-            if (e.target === this) closePhonePopup();
-        });
     </script>
 
 </body>
