@@ -30,7 +30,7 @@
 
         .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
 
-        /* ===== شريط الإعلانات مع الرقم واضح ===== */
+        /* ===== شريط الإعلانات ===== */
         .announcement {
             background: var(--primary);
             color: #fff;
@@ -39,20 +39,9 @@
             font-weight: 700;
             font-size: 1rem;
         }
-        .announcement .phone-number {
-            color: var(--gold);
-            font-size: 1.3rem;
-            font-weight: 900;
-            direction: ltr;
-            display: inline-block;
-            background: rgba(255,255,255,0.1);
-            padding: 2px 15px;
-            border-radius: 20px;
-            margin: 0 5px;
-        }
         .announcement .whatsapp-icon { color: var(--whatsapp); margin: 0 5px; }
 
-        /* ===== الهيدر مع زر واتساب ===== */
+        /* ===== الهيدر ===== */
         header {
             background: var(--primary);
             padding: 15px 20px;
@@ -80,7 +69,6 @@
             box-shadow: 0 4px 15px rgba(37,211,102,0.3);
         }
         .btn-whatsapp-header:hover { transform: scale(1.05); opacity: 0.9; }
-        .btn-whatsapp-header .phone-big { font-size: 1.2rem; direction: ltr; }
 
         /* ===== الهيرو ===== */
         .hero {
@@ -298,7 +286,7 @@
         .faq-item.active .answer { padding: 15px 20px; max-height: 200px; }
         .faq-item.active .question i { transform: rotate(180deg); }
 
-        /* ===== طرق الدفع ===== */
+        /* ===== طرق الدفع (من غير رقم) ===== */
         .payment-icons {
             display: flex;
             justify-content: center;
@@ -318,24 +306,12 @@
         .payment-item:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
         .payment-item i { font-size: 2.5rem; display: block; margin-bottom: 8px; }
         .payment-item .pay-name { font-size: 0.95rem; font-weight: 700; color: var(--text); }
-        .payment-item .pay-number {
-            font-size: 1.2rem;
-            font-weight: 900;
-            color: var(--gold);
-            direction: ltr;
-            background: var(--bg);
-            padding: 4px 12px;
-            border-radius: 20px;
-            display: inline-block;
-            margin-top: 5px;
-            border: 1px dashed var(--gold);
-        }
         .payment-item.instapay i { color: var(--instapay); }
         .payment-item.vodafone i { color: var(--vodafone); }
         .payment-item.wallet i { color: var(--gold); }
         .payment-item.whatsapp-pay i { color: var(--whatsapp); }
 
-        /* ===== الباقات (كل زر يفتح واتساب برسالة جاهزة) ===== */
+        /* ===== الباقات ===== */
         .pricing-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -415,16 +391,6 @@
             text-align: center;
         }
         .footer a { color: var(--gold); text-decoration: none; }
-        .footer .phone-footer {
-            color: var(--gold);
-            font-weight: 900;
-            font-size: 1.4rem;
-            direction: ltr;
-            background: rgba(255,255,255,0.1);
-            padding: 4px 20px;
-            border-radius: 20px;
-            display: inline-block;
-        }
 
         /* ===== تأثيرات ===== */
         @keyframes pulse {
@@ -438,30 +404,26 @@
             .pricing-card.featured { transform: none; }
             .pricing-card.featured:hover { transform: translateY(-5px); }
             .payment-item { min-width: 100px; padding: 15px; }
-            .payment-item .pay-number { font-size: 1rem; }
-            .btn-whatsapp-header .phone-big { font-size: 0.9rem; }
-            .announcement .phone-number { font-size: 1rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- ===== شريط الإعلانات ===== -->
+    <!-- ===== شريط الإعلانات (من غير رقم) ===== -->
     <div class="announcement">
         <i class="fab fa-whatsapp whatsapp-icon"></i>
-        تواصل مباشر على واتساب:
-        <span class="phone-number">01112876080</span>
+        اطلب الآن عبر واتساب
         <span style="margin: 0 10px;">|</span>
         🔥 عرض خاص: خصم 50% لفترة محدودة!
     </div>
 
-    <!-- ===== الهيدر ===== -->
+    <!-- ===== الهيدر (من غير رقم) ===== -->
     <header>
         <div class="logo"><i class="fas fa-store"></i> متجري</div>
         <div class="header-btns">
             <a href="https://wa.me/201112876080" target="_blank" class="btn-whatsapp-header">
                 <i class="fab fa-whatsapp"></i>
-                <span class="phone-big">01112876080</span>
+                تواصل عبر واتساب
             </a>
         </div>
     </header>
@@ -550,7 +512,7 @@
         </div>
     </section>
 
-    <!-- ===== طرق الدفع ===== -->
+    <!-- ===== طرق الدفع (من غير رقم) ===== -->
     <section class="section" style="background:var(--bg);">
         <div class="container">
             <h2 class="section-title">💳 <span>طرق</span> الدفع</h2>
@@ -558,28 +520,20 @@
                 <div class="payment-item instapay">
                     <i class="fas fa-bolt"></i>
                     <div class="pay-name">إنستاباي</div>
-                    <div class="pay-number">01112876080</div>
                 </div>
                 <div class="payment-item vodafone">
                     <i class="fas fa-mobile-alt"></i>
                     <div class="pay-name">فودافون كاش</div>
-                    <div class="pay-number">01112876080</div>
                 </div>
                 <div class="payment-item wallet">
                     <i class="fas fa-wallet"></i>
                     <div class="pay-name">محفظة إلكترونية</div>
-                    <div class="pay-number">01112876080</div>
                 </div>
                 <div class="payment-item whatsapp-pay">
                     <i class="fab fa-whatsapp"></i>
                     <div class="pay-name">واتساب</div>
-                    <div class="pay-number">01112876080</div>
                 </div>
             </div>
-            <p style="text-align:center; color:var(--text-light); font-size:1rem; margin-top:10px;">
-                <i class="fas fa-info-circle"></i> جميع طرق الدفع على نفس الرقم:
-                <strong style="color:var(--gold); font-size:1.3rem; direction:ltr; display:inline-block;">01112876080</strong>
-            </p>
         </div>
     </section>
 
@@ -588,7 +542,6 @@
         <div class="container">
             <h2 class="section-title">💎 <span>اختر</span> الباقة</h2>
             <div class="pricing-grid">
-                <!-- الباقة الأساسية 99 ج.م -->
                 <div class="pricing-card">
                     <h3>الباقة الأساسية</h3>
                     <div>
@@ -607,7 +560,6 @@
                     </a>
                 </div>
 
-                <!-- الباقة الاحترافية 199 ج.م -->
                 <div class="pricing-card featured">
                     <div class="badge"><i class="fas fa-star"></i> الأكثر مبيعاً</div>
                     <h3>الباقة الاحترافية</h3>
@@ -627,7 +579,6 @@
                     </a>
                 </div>
 
-                <!-- الباقة الممتازة 299 ج.م -->
                 <div class="pricing-card">
                     <h3>الباقة الممتازة</h3>
                     <div>
@@ -670,8 +621,10 @@
         <div class="container">
             <p>&copy; 2026 متجري. جميع الحقوق محفوظة.</p>
             <p style="margin-top:10px;">
-                📞 للتواصل المباشر:
-                <span class="phone-footer">01112876080</span>
+                📞 للتواصل عبر واتساب:
+                <a href="https://wa.me/201112876080" target="_blank" style="color:var(--gold); font-weight:700;">
+                    <i class="fab fa-whatsapp"></i> اضغط هنا للتواصل
+                </a>
             </p>
             <p style="margin-top:8px;">
                 🖥️ <a href="https://mostafatifa1122-eng.github.io/sotry/" target="_blank">جرب المتجر بنفسك</a>
