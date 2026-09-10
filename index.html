@@ -1,661 +1,454 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>متجر إلكتروني متكامل - نظام احترافي للبيع أونلاين</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <style>
-        :root {
-            --primary: #1b4d3e;
-            --primary-dark: #0f3329;
-            --primary-light: #2c7a62;
-            --gold: #f5a623;
-            --gold-hover: #d98e16;
-            --bg: #f8faf9;
-            --card: #ffffff;
-            --text: #0f172a;
-            --text-light: #64748b;
-            --danger: #e11d48;
-            --success: #16a34a;
-            --whatsapp: #25d366;
-            --instapay: #6c3c9e;
-            --vodafone: #e60000;
-            --border: #e2e8f0;
-            --shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
-        body { background: var(--bg); color: var(--text); }
+# =========================== نماذج المستخدمين والصلاحيات ===========================
 
-        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+@dataclass
+class User:
+    id: int
+    username: str
+    password_hash: str  # مش هنخزن كلمة المرور نصاً
+    full_name: str
+    role: str  # manager, assistant_manager, employee, lab_tech, warehouse
+    employee_id: Optional[int] = None  # لو الموظف مرتبط بموظف في نظام الـ HR
+    is_active: bool = True
+    created_at: datetime = None
+    last_login: Optional[datetime] = None
 
-        /* ===== شريط الإعلانات ===== */
-        .announcement {
-            background: var(--primary);
-            color: #fff;
-            text-align: center;
-            padding: 12px;
-            font-weight: 700;
-            font-size: 1rem;
-        }
-        .announcement .whatsapp-icon { color: var(--whatsapp); margin: 0 5px; }
+@dataclass
+class Permission:
+    id: int
+    role: str
+    module: str  # products, invoices, batches, lab, attendance, payroll, etc.
+    can_view: bool = False
+    can_create: bool = False
+    can_edit: bool = False
+    can_delete: bool = False
 
-        /* ===== الهيدر ===== */
-        header {
-            background: var(--primary);
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .logo { color: #fff; font-weight: 900; font-size: 1.3rem; display: flex; align-items: center; gap: 8px; }
-        .logo i { color: var(--gold); }
-        .header-btns { display: flex; gap: 10px; flex-wrap: wrap; }
-        .btn-whatsapp-header {
-            background: var(--whatsapp);
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 1rem;
-            transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(37,211,102,0.3);
-        }
-        .btn-whatsapp-header:hover { transform: scale(1.05); opacity: 0.9; }
+# =========================== إضافة جداول المستخدمين في قاعدة البيانات ===========================
 
-        /* ===== الهيرو ===== */
-        .hero {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: #fff;
-            padding: 60px 20px;
-            text-align: center;
-            border-radius: 0 0 30px 30px;
-            position: relative;
-            overflow: hidden;
-        }
-        .hero::after {
-            content: '';
-            position: absolute;
-            bottom: -50px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 120%;
-            height: 100px;
-            background: var(--bg);
-            border-radius: 50% 50% 0 0;
-        }
-        .hero h1 { font-size: 2.5rem; font-weight: 900; margin-bottom: 10px; position: relative; z-index: 2; }
-        .hero h1 span { color: var(--gold); }
-        .hero p { font-size: 1.1rem; opacity: 0.9; max-width: 600px; margin: 0 auto 20px; position: relative; z-index: 2; }
-        .hero .price-tag {
-            display: inline-block;
-            background: rgba(255,255,255,0.15);
-            padding: 10px 30px;
-            border-radius: 50px;
-            font-size: 1.8rem;
-            font-weight: 900;
-            border: 2px solid var(--gold);
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 2;
-        }
-        .hero .price-tag span { color: var(--gold); }
-        .hero .old-price { text-decoration: line-through; opacity: 0.6; font-size: 1.2rem; margin-left: 10px; }
+def create_user_tables(self):
+    tables = [
+        """CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE NOT NULL,
+            password_hash TEXT NOT NULL,
+            full_name TEXT NOT NULL,
+            role TEXT NOT NULL,
+            employee_id INTEGER,
+            is_active INTEGER DEFAULT 1,
+            created_at TEXT NOT NULL,
+            last_login TEXT,
+            FOREIGN KEY (employee_id) REFERENCES employees(id)
+        )""",
+        
+        """CREATE TABLE IF NOT EXISTS permissions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            role TEXT NOT NULL,
+            module TEXT NOT NULL,
+            can_view INTEGER DEFAULT 0,
+            can_create INTEGER DEFAULT 0,
+            can_edit INTEGER DEFAULT 0,
+            can_delete INTEGER DEFAULT 0
+        )"""
+    ]
+    for table in tables:
+        try:
+            self.cursor.execute(table)
+        except:
+            pass
+    self.conn.commit()
 
-        /* ===== أزرار الهيرو ===== */
-        .hero-btns { position: relative; z-index: 2; }
-        .btn-buy-hero {
-            background: var(--gold);
-            color: #000;
-            border: none;
-            padding: 16px 50px;
-            border-radius: 10px;
-            font-weight: 800;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: 0.3s;
-            text-decoration: none;
-            display: inline-block;
-            box-shadow: 0 10px 25px rgba(245,166,35,0.4);
-            animation: pulse 2s infinite;
-        }
-        .btn-buy-hero:hover { background: var(--gold-hover); transform: translateY(-3px); }
-        .btn-buy-hero i { margin-left: 8px; }
+# =========================== دوال إدارة المستخدمين ===========================
 
-        .btn-demo {
-            display: inline-block;
-            background: rgba(255,255,255,0.15);
-            color: #fff;
-            padding: 14px 30px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 700;
-            border: 2px solid rgba(255,255,255,0.3);
-            transition: 0.3s;
-            margin: 5px;
-        }
-        .btn-demo:hover { background: rgba(255,255,255,0.3); transform: translateY(-2px); }
+class UserManager:
+    def __init__(self, db):
+        self.db = db
 
-        /* ===== العد التنازلي ===== */
-        .timer-section {
-            background: var(--card);
-            padding: 20px;
-            border-radius: 16px;
-            margin: -30px auto 30px;
-            max-width: 500px;
-            text-align: center;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            position: relative;
-            z-index: 10;
-        }
-        .timer-section h3 { font-size: 1rem; color: var(--text-light); margin-bottom: 10px; }
-        .timer-box { display: flex; justify-content: center; gap: 15px; }
-        .time-item { text-align: center; }
-        .time-item .num {
-            display: block;
-            font-size: 2rem;
-            font-weight: 900;
-            color: var(--danger);
-            background: var(--bg);
-            padding: 8px 12px;
-            border-radius: 8px;
-            min-width: 50px;
-        }
-        .time-item .label { font-size: 0.7rem; color: var(--text-light); margin-top: 3px; display: block; }
+    def hash_password(self, password):
+        return hashlib.sha256(password.encode()).hexdigest()
 
-        /* ===== الأقسام ===== */
-        .section { padding: 50px 0; }
-        .section-title {
-            text-align: center;
-            font-size: 1.8rem;
-            font-weight: 900;
-            margin-bottom: 30px;
-        }
-        .section-title span { color: var(--primary); }
+    def create_user(self, username, password, full_name, role, employee_id=None):
+        """ إنشاء مستخدم جديد """
+        password_hash = self.hash_password(password)
+        created_at = datetime.now().isoformat()
+        try:
+            self.db.execute(
+                """INSERT INTO users 
+                   (username, password_hash, full_name, role, employee_id, is_active, created_at, last_login)
+                   VALUES (?, ?, ?, ?, ?, 1, ?, NULL)""",
+                (username, password_hash, full_name, role, employee_id, created_at)
+            )
+            return True, "تم إنشاء المستخدم بنجاح"
+        except sqlite3.IntegrityError:
+            return False, "اسم المستخدم موجود بالفعل"
 
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-        }
-        .feature-card {
-            background: var(--card);
-            padding: 25px;
-            border-radius: var(--radius);
-            text-align: center;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            transition: 0.3s;
-        }
-        .feature-card:hover { transform: translateY(-5px); }
-        .feature-card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 10px; }
-        .feature-card h3 { font-size: 1.1rem; margin-bottom: 5px; }
-        .feature-card p { color: var(--text-light); font-size: 0.9rem; }
+    def login(self, username, password):
+        """ تسجيل الدخول """
+        password_hash = self.hash_password(password)
+        row = self.db.fetch_one(
+            "SELECT * FROM users WHERE username = ? AND password_hash = ? AND is_active = 1",
+            (username, password_hash)
+        )
+        if row:
+            # تحديث آخر تسجيل دخول
+            self.db.execute(
+                "UPDATE users SET last_login = ? WHERE id = ?",
+                (datetime.now().isoformat(), row[0])
+            )
+            user = dict(zip(['id','username','password_hash','full_name','role','employee_id','is_active','created_at','last_login'], row))
+            return True, user
+        return False, "اسم المستخدم أو كلمة المرور غير صحيحة"
 
-        /* ===== معرض الصور ===== */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        .gallery-item {
-            background: var(--card);
-            border-radius: var(--radius);
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            text-align: center;
-        }
-        .gallery-item .img-placeholder {
-            height: 180px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            color: #fff;
-        }
-        .gallery-item .caption { padding: 12px; font-weight: 700; }
+    def get_user_permissions(self, role):
+        """ جلب صلاحيات المستخدم حسب دوره """
+        rows = self.db.fetch_all(
+            "SELECT * FROM permissions WHERE role = ?",
+            (role,)
+        )
+        permissions = {}
+        for row in rows:
+            perm = dict(zip(['id','role','module','can_view','can_create','can_edit','can_delete'], row))
+            permissions[perm['module']] = perm
+        return permissions
 
-        /* ===== شرح المنتج ===== */
-        .explain-box {
-            background: var(--card);
-            padding: 30px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            margin-bottom: 20px;
-        }
-        .explain-box h3 { color: var(--primary); margin-bottom: 10px; }
-        .explain-box ul { padding-right: 20px; }
-        .explain-box ul li { padding: 6px 0; color: var(--text-light); }
-        .explain-box ul li i { color: var(--success); margin-left: 8px; }
+    def check_permission(self, role, module, action):
+        """ التحقق من صلاحية معينة """
+        row = self.db.fetch_one(
+            "SELECT * FROM permissions WHERE role = ? AND module = ?",
+            (role, module)
+        )
+        if not row:
+            # إذا لم توجد صلاحيات محددة، نستخدم الـ default حسب الدور
+            return self.get_default_permission(role, module, action)
+        
+        perm = dict(zip(['id','role','module','can_view','can_create','can_edit','can_delete'], row))
+        if action == 'view':
+            return bool(perm['can_view'])
+        elif action == 'create':
+            return bool(perm['can_create'])
+        elif action == 'edit':
+            return bool(perm['can_edit'])
+        elif action == 'delete':
+            return bool(perm['can_delete'])
+        return False
 
-        /* ===== شهادات العملاء ===== */
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        .testimonial-card {
-            background: var(--card);
-            padding: 25px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            text-align: center;
-        }
-        .testimonial-card .stars { color: var(--gold); font-size: 1.2rem; margin-bottom: 8px; }
-        .testimonial-card p { color: var(--text-light); font-size: 0.95rem; font-style: italic; }
-        .testimonial-card .name { font-weight: 700; margin-top: 10px; color: var(--primary); }
+    def get_default_permission(self, role, module, action):
+        """ صلاحيات افتراضية لكل دور """
+        # المدير العام: كل حاجة
+        if role == 'manager':
+            return True
+        
+        # مساعد المدير: كل حاجة ما عدا حذف
+        if role == 'assistant_manager':
+            if action == 'delete':
+                return False
+            return True
+        
+        # الموظف: بس يشوف معلوماته
+        if role == 'employee':
+            if module in ['attendance', 'payroll'] and action == 'view':
+                return True
+            return False
+        
+        # مسؤول المعمل: المعمل والجودة فقط
+        if role == 'lab_tech':
+            if module in ['lab', 'quality_control']:
+                return action != 'delete'
+            return False
+        
+        # مسؤول المخازن: المنتجات والفواتير فقط
+        if role == 'warehouse':
+            if module in ['products', 'invoices', 'batches']:
+                return action != 'delete'
+            return False
+        
+        return False
 
-        /* ===== الأسئلة الشائعة ===== */
-        .faq-item {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            margin-bottom: 10px;
-            overflow: hidden;
-        }
-        .faq-item .question {
-            padding: 15px 20px;
-            cursor: pointer;
-            font-weight: 700;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--bg);
-            transition: 0.3s;
-        }
-        .faq-item .question:hover { background: var(--primary); color: #fff; }
-        .faq-item .answer {
-            padding: 0 20px;
-            max-height: 0;
-            overflow: hidden;
-            transition: 0.3s;
-            color: var(--text-light);
-        }
-        .faq-item.active .answer { padding: 15px 20px; max-height: 200px; }
-        .faq-item.active .question i { transform: rotate(180deg); }
+    def assign_permission(self, role, module, can_view, can_create, can_edit, can_delete):
+        """ تعيين صلاحيات لدور معين """
+        existing = self.db.fetch_one(
+            "SELECT id FROM permissions WHERE role = ? AND module = ?",
+            (role, module)
+        )
+        if existing:
+            self.db.execute(
+                """UPDATE permissions 
+                   SET can_view = ?, can_create = ?, can_edit = ?, can_delete = ? 
+                   WHERE role = ? AND module = ?""",
+                (1 if can_view else 0, 1 if can_create else 0, 1 if can_edit else 0, 1 if can_delete else 0, role, module)
+            )
+        else:
+            self.db.execute(
+                """INSERT INTO permissions 
+                   (role, module, can_view, can_create, can_edit, can_delete)
+                   VALUES (?, ?, ?, ?, ?, ?)""",
+                (role, module, 1 if can_view else 0, 1 if can_create else 0, 1 if can_edit else 0, 1 if can_delete else 0)
+            )
+        return True
 
-        /* ===== طرق الدفع (من غير رقم) ===== */
-        .payment-icons {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            flex-wrap: wrap;
-            margin: 20px 0;
-        }
-        .payment-item {
-            text-align: center;
-            background: var(--card);
-            padding: 20px 30px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            min-width: 140px;
-            transition: 0.3s;
-        }
-        .payment-item:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
-        .payment-item i { font-size: 2.5rem; display: block; margin-bottom: 8px; }
-        .payment-item .pay-name { font-size: 0.95rem; font-weight: 700; color: var(--text); }
-        .payment-item.instapay i { color: var(--instapay); }
-        .payment-item.vodafone i { color: var(--vodafone); }
-        .payment-item.wallet i { color: var(--gold); }
-        .payment-item.whatsapp-pay i { color: var(--whatsapp); }
+    def get_all_users(self):
+        rows = self.db.fetch_all("SELECT * FROM users")
+        return [dict(zip(['id','username','password_hash','full_name','role','employee_id','is_active','created_at','last_login'], row)) for row in rows]
 
-        /* ===== الباقات ===== */
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        .pricing-card {
-            background: var(--card);
-            border-radius: var(--radius);
-            padding: 30px;
-            text-align: center;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            transition: 0.3s;
-        }
-        .pricing-card:hover { transform: translateY(-5px); }
-        .pricing-card.featured {
-            border: 2px solid var(--gold);
-            transform: scale(1.03);
-        }
-        .pricing-card.featured:hover { transform: scale(1.03) translateY(-5px); }
-        .pricing-card .badge {
-            background: var(--gold);
-            color: #000;
-            padding: 4px 14px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 800;
-            display: inline-block;
-            margin-bottom: 10px;
-        }
-        .pricing-card .price { font-size: 2.2rem; font-weight: 900; color: var(--primary); }
-        .pricing-card .price span { font-size: 1rem; font-weight: 400; color: var(--text-light); }
-        .pricing-card .old-price { text-decoration: line-through; color: var(--text-light); font-size: 1rem; }
-        .pricing-card ul { list-style: none; margin: 15px 0; text-align: right; }
-        .pricing-card ul li { padding: 6px 0; color: var(--text-light); }
-        .pricing-card ul li i { color: var(--success); margin-left: 8px; }
+# =========================== إعداد الصلاحيات الافتراضية ===========================
 
-        .btn-buy-now {
-            background: var(--whatsapp);
-            color: #fff;
-            border: none;
-            padding: 14px 30px;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: 0.3s;
-            text-decoration: none;
-            display: inline-block;
-            width: 100%;
-            box-shadow: 0 4px 15px rgba(37,211,102,0.3);
-        }
-        .btn-buy-now:hover { background: #1eb954; transform: translateY(-2px); }
-        .btn-buy-now i { margin-left: 8px; }
+def setup_default_permissions(user_manager):
+    """ إعداد الصلاحيات الافتراضية لكل دور """
+    modules = ['products', 'invoices', 'batches', 'lab', 'sds', 'attendance', 
+               'payroll', 'employees', 'quality_control', 'maintenance', 'waste', 
+               'shipping', 'complaints', 'doc', 'coa', 'supplier_audits', 'emergency_plans']
+    
+    # صلاحيات المدير العام: كل حاجة
+    for module in modules:
+        user_manager.assign_permission('manager', module, True, True, True, True)
+    
+    # صلاحيات مساعد المدير: كل حاجة ما عدا الحذف
+    for module in modules:
+        user_manager.assign_permission('assistant_manager', module, True, True, True, False)
+    
+    # صلاحيات الموظف: بس الحضور والرواتب (عرض فقط)
+    user_manager.assign_permission('employee', 'attendance', True, False, False, False)
+    user_manager.assign_permission('employee', 'payroll', True, False, False, False)
+    
+    # صلاحيات مسؤول المعمل
+    user_manager.assign_permission('lab_tech', 'lab', True, True, True, False)
+    user_manager.assign_permission('lab_tech', 'quality_control', True, True, True, False)
+    user_manager.assign_permission('lab_tech', 'sds', True, True, True, False)
+    user_manager.assign_permission('lab_tech', 'coa', True, True, True, False)
+    user_manager.assign_permission('lab_tech', 'batches', True, True, False, False)
+    
+    # صلاحيات مسؤول المخازن
+    user_manager.assign_permission('warehouse', 'products', True, True, True, False)
+    user_manager.assign_permission('warehouse', 'batches', True, True, True, False)
+    user_manager.assign_permission('warehouse', 'invoices', True, True, True, False)
+    user_manager.assign_permission('warehouse', 'shipping', True, True, True, False)
 
-        /* ===== الضمان ===== */
-        .guarantee {
-            background: var(--card);
-            padding: 40px;
-            border-radius: var(--radius);
-            text-align: center;
-            border: 2px solid var(--gold);
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        .guarantee i { font-size: 3rem; color: var(--gold); margin-bottom: 10px; }
-        .guarantee h2 { font-size: 1.5rem; margin-bottom: 5px; }
-        .guarantee p { color: var(--text-light); }
+# =========================== واجهة تسجيل الدخول الرئيسية ===========================
 
-        /* ===== الفوتر ===== */
-        .footer {
-            background: var(--primary);
-            color: #94a3b8;
-            padding: 30px 20px;
-            text-align: center;
-        }
-        .footer a { color: var(--gold); text-decoration: none; }
+def login_screen(user_manager):
+    """ شاشة تسجيل الدخول """
+    print("\n" + "="*60)
+    print("          نظام المصانع الكيميائية - CHEMICAL ERP")
+    print("="*60)
+    print("\n🔐 تسجيل الدخول")
+    print("-"*40)
+    
+    username = input("اسم المستخدم: ")
+    password = input("كلمة المرور: ")
+    
+    success, result = user_manager.login(username, password)
+    if success:
+        user = result
+        print(f"\n✅ مرحباً {user['full_name']} - {user['role']}")
+        return user
+    else:
+        print(f"\n❌ {result}")
+        return None
 
-        /* ===== تأثيرات ===== */
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
+# =========================== تعديل القائمة الرئيسية بصلاحيات ===========================
 
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 1.8rem; }
-            .pricing-card.featured { transform: none; }
-            .pricing-card.featured:hover { transform: translateY(-5px); }
-            .payment-item { min-width: 100px; padding: 15px; }
-        }
-    </style>
-</head>
-<body>
+def main_menu_with_auth(erp, user_manager, current_user):
+    """ القائمة الرئيسية مع صلاحيات """
+    role = current_user['role']
+    
+    while True:
+        print("\n" + "="*60)
+        print(f"🏭 نظام المصانع الكيميائية - مرحباً {current_user['full_name']} ({role})")
+        print("="*60)
+        
+        # عرض القائمة حسب الصلاحيات
+        menu_items = []
+        
+        # منتجات (كل الأدوار ما عدا الموظف)
+        if user_manager.check_permission(role, 'products', 'view'):
+            menu_items.append(("1", "إدارة المنتجات والمخازن"))
+        
+        # موظفين (المدير ومساعده فقط)
+        if user_manager.check_permission(role, 'employees', 'view'):
+            menu_items.append(("2", "إدارة الموظفين"))
+        
+        # حضور (الكل)
+        if user_manager.check_permission(role, 'attendance', 'view'):
+            menu_items.append(("3", "الحضور والانصراف"))
+        
+        # فواتير
+        if user_manager.check_permission(role, 'invoices', 'view'):
+            menu_items.append(("4", "الفواتير (بيع/شراء/تصدير)"))
+        
+        # دفعات
+        if user_manager.check_permission(role, 'batches', 'view'):
+            menu_items.append(("5", "تتبع الدفعات (Batch)"))
+        
+        # معمل (مسؤول المعمل والمدير)
+        if user_manager.check_permission(role, 'lab', 'view'):
+            menu_items.append(("6", "🧪 المعمل الكيميائي"))
+        
+        # الجودة (مسؤول المعمل والمدير)
+        if user_manager.check_permission(role, 'quality_control', 'view'):
+            menu_items.append(("7", "📋 مراقبة الجودة (QC)"))
+        
+        # المعايرة (مسؤول المعمل والمدير)
+        if user_manager.check_permission(role, 'lab', 'view'):
+            menu_items.append(("8", "🔧 المعايرة (NIS)"))
+        
+        # الشحن (مسؤول المخازن والمدير)
+        if user_manager.check_permission(role, 'shipping', 'view'):
+            menu_items.append(("9", "🚢 سجل الشحن"))
+        
+        # شهادات التصدير (المدير ومساعده)
+        if user_manager.check_permission(role, 'doc', 'view'):
+            menu_items.append(("10", "📜 إقرار المطابقة (DoC)"))
+            menu_items.append(("11", "📄 شهادة التحليل (CoA)"))
+        
+        # الشكاوى (المدير ومساعده)
+        if user_manager.check_permission(role, 'complaints', 'view'):
+            menu_items.append(("12", "📋 سجل الشكاوى (48 ساعة)"))
+        
+        # الموردين (المدير ومساعده)
+        if user_manager.check_permission(role, 'supplier_audits', 'view'):
+            menu_items.append(("13", "📋 تدقيق الموردين"))
+        
+        # صيانة (الكل ما عدا الموظف)
+        if user_manager.check_permission(role, 'maintenance', 'view'):
+            menu_items.append(("14", "🔧 الصيانة الدورية"))
+        
+        # طوارئ (المدير ومساعده)
+        if user_manager.check_permission(role, 'emergency_plans', 'view'):
+            menu_items.append(("15", "🚨 خطط الطوارئ"))
+        
+        # مخلفات (المدير ومساعده)
+        if user_manager.check_permission(role, 'waste', 'view'):
+            menu_items.append(("16", "☣️ المخلفات الكيميائية"))
+        
+        # رواتب (المدير ومساعده والموظف يشوف فقط)
+        if user_manager.check_permission(role, 'payroll', 'view'):
+            menu_items.append(("17", "💰 الرواتب"))
+        
+        # SDS (الكل ما عدا الموظف)
+        if user_manager.check_permission(role, 'sds', 'view'):
+            menu_items.append(("18", "📄 صحائف السلامة SDS"))
+        
+        # تقارير أيزو (المدير ومساعده)
+        if user_manager.check_permission(role, 'products', 'view'):
+            menu_items.append(("19", "📋 تقرير الأيزو"))
+        
+        # لوحة التحكم (الكل)
+        menu_items.append(("20", "📊 لوحة التحكم"))
+        
+        # إدارة المستخدمين (المدير فقط)
+        if role == 'manager':
+            menu_items.append(("21", "🔐 إدارة المستخدمين والصلاحيات"))
+        
+        menu_items.append(("0", "🚪 تسجيل الخروج"))
+        
+        # طباعة القائمة
+        for key, label in menu_items:
+            print(f" {key}. {label}")
+        
+        print("-"*60)
+        choice = input("اختر: ")
+        
+        # تنفيذ الأوامر حسب الاختيار مع التحقق من الصلاحيات
+        if choice == "0":
+            print("\n👋 مع السلامة!")
+            break
+        
+        # هنا هنضيف تنفيذ كل وحدة مع التحقق من الصلاحية
+        # مثال لوحدة المنتجات
+        elif choice == "1":
+            if user_manager.check_permission(role, 'products', 'view'):
+                manage_products(erp, user_manager, role)
+            else:
+                print("❌ ليس لديك صلاحية لعرض المنتجات")
+        
+        # باقي الوحدات بنفس المنطق...
 
-    <!-- ===== شريط الإعلانات (من غير رقم) ===== -->
-    <div class="announcement">
-        <i class="fab fa-whatsapp whatsapp-icon"></i>
-        اطلب الآن عبر واتساب
-        <span style="margin: 0 10px;">|</span>
-        🔥 عرض خاص: خصم 50% لفترة محدودة!
-    </div>
+def manage_products(erp, user_manager, role):
+    """ إدارة المنتجات مع التحقق من الصلاحيات """
+    while True:
+        print("\n📦 إدارة المنتجات والمخازن:")
+        print(" 1. عرض المنتجات")
+        if user_manager.check_permission(role, 'products', 'create'):
+            print(" 2. إضافة منتج جديد")
+        if user_manager.check_permission(role, 'products', 'edit'):
+            print(" 3. تحديث المخزون")
+        print(" 4. عرض المنتجات منخفضة المخزون")
+        print(" 5. إذن صرف خامات")
+        print(" 6. إذن استرجاع خامات")
+        print(" 0. رجوع")
+        
+        sub = input("اختر: ")
+        if sub == "0":
+            break
+        elif sub == "1":
+            products = erp.get_products()
+            for p in products:
+                print(f"🔹 {p['code']} - {p['name']} | HS: {p['hs_code']} | الكمية: {p['current_quantity']} {p['unit']}")
+        elif sub == "2":
+            if user_manager.check_permission(role, 'products', 'create'):
+                name = input("اسم المنتج: ")
+                code = input("الكود: ")
+                hs_code = input("رمز HS Code: ")
+                category = input("النوع (raw/finished/chemical): ")
+                unit = input("الوحدة (kg/liter/ton/piece): ")
+                price = float(input("سعر البيع: "))
+                cost = float(input("تكلفة الشراء: "))
+                min_qty = float(input("الحد الأدنى للمخزون: ") or 0)
+                erp.add_product(name, code, hs_code, category, unit, price, cost, min_qty)
+                print("✅ تم إضافة المنتج مع رمز HS")
+            else:
+                print("❌ ليس لديك صلاحية لإضافة منتجات")
+        elif sub == "3":
+            if user_manager.check_permission(role, 'products', 'edit'):
+                product_id = int(input("رقم المنتج: "))
+                qty = float(input("الكمية: "))
+                op = input("عملية (add/subtract): ")
+                erp.update_stock(product_id, qty, op)
+                print("✅ تم تحديث المخزون")
+            else:
+                print("❌ ليس لديك صلاحية لتحديث المخزون")
 
-    <!-- ===== الهيدر (من غير رقم) ===== -->
-    <header>
-        <div class="logo"><i class="fas fa-store"></i> متجري</div>
-        <div class="header-btns">
-            <a href="https://wa.me/201112876080" target="_blank" class="btn-whatsapp-header">
-                <i class="fab fa-whatsapp"></i>
-                تواصل عبر واتساب
-            </a>
-        </div>
-    </header>
+# =========================== إنشاء المستخدمين الافتراضيين ===========================
 
-    <!-- ===== الهيرو ===== -->
-    <section class="hero">
-        <div class="container">
-            <h1>🚀 متجر إلكتروني <span>متكامل</span></h1>
-            <p>نظام متجر إلكتروني احترافي مع لوحة تحكم، سلة شراء، وتزامن سحابي — كل هذا في ملف واحد جاهز للاستخدام!</p>
-            <div class="price-tag">
-                <span class="old-price">500 ج.م</span>
-                <span>199 ج.م</span>
-            </div>
-            <br>
-            <div class="hero-btns">
-                <a href="https://wa.me/201112876080?text=مرحباً!%20أريد%20شراء%20نظام%20المتجر%20الإلكتروني%20بسعر%20199%20جنيه" target="_blank" class="btn-buy-hero">
-                    <i class="fab fa-whatsapp"></i> اشتري الآن - 199 ج.م
-                </a>
-                <br><br>
-                <a href="https://mostafatifa1122-eng.github.io/sotry/" target="_blank" class="btn-demo">
-                    <i class="fas fa-external-link-alt"></i> 🖥️ جرب المتجر بنفسك
-                </a>
-            </div>
-        </div>
-    </section>
+def create_default_users(user_manager):
+    """ إنشاء المستخدمين الأساسيين """
+    users = [
+        ("admin", "admin123", "المدير العام", "manager"),
+        ("assistant", "assist123", "مساعد المدير", "assistant_manager"),
+        ("lab", "lab123", "مسؤول المعمل", "lab_tech"),
+        ("warehouse", "ware123", "مسؤول المخازن", "warehouse"),
+        ("employee1", "emp123", "أحمد محمد", "employee"),
+        ("employee2", "emp456", "محمد علي", "employee"),
+    ]
+    
+    for username, password, full_name, role in users:
+        result, msg = user_manager.create_user(username, password, full_name, role)
+        print(f"{'✅' if result else '⚠️'} {username}: {msg}")
 
-    <!-- ===== العد التنازلي ===== -->
-    <div class="timer-section">
-        <h3>⏰ ينتهي العرض خلال</h3>
-        <div class="timer-box">
-            <div class="time-item">
-                <span class="num" id="days">00</span>
-                <span class="label">يوم</span>
-            </div>
-            <div class="time-item">
-                <span class="num" id="hours">00</span>
-                <span class="label">ساعة</span>
-            </div>
-            <div class="time-item">
-                <span class="num" id="minutes">00</span>
-                <span class="label">دقيقة</span>
-            </div>
-            <div class="time-item">
-                <span class="num" id="seconds">00</span>
-                <span class="label">ثانية</span>
-            </div>
-        </div>
-    </div>
+# =========================== التشغيل الرئيسي ===========================
 
-    <!-- ===== المميزات ===== -->
-    <section class="section">
-        <div class="container">
-            <h2 class="section-title">✨ <span>مميزات</span> المنتج</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <i class="fas fa-shopping-bag"></i>
-                    <h3>متجر متكامل</h3>
-                    <p>عرض المنتجات، سلة شراء، وإتمام طلبات بسهولة</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-user-shield"></i>
-                    <h3>لوحة تحكم كاملة</h3>
-                    <p>إضافة وحذف المنتجات، متابعة الطلبات بكل سهولة</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-cloud"></i>
-                    <h3>تزامن سحابي</h3>
-                    <p>ربط Firebase لتزامن البيانات بين جميع الأجهزة</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fab fa-whatsapp"></i>
-                    <h3>دفع عبر واتساب</h3>
-                    <p>استلام الطلبات مباشرة على واتساب المسؤول</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-mobile-alt"></i>
-                    <h3>يعمل على كل الأجهزة</h3>
-                    <p>متجاوب تماماً مع الكمبيوتر والموبايل والتابلت</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-file-export"></i>
-                    <h3>تصدير واستيراد</h3>
-                    <p>نقل البيانات بين الأجهزة بضغطة زر</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===== طرق الدفع (من غير رقم) ===== -->
-    <section class="section" style="background:var(--bg);">
-        <div class="container">
-            <h2 class="section-title">💳 <span>طرق</span> الدفع</h2>
-            <div class="payment-icons">
-                <div class="payment-item instapay">
-                    <i class="fas fa-bolt"></i>
-                    <div class="pay-name">إنستاباي</div>
-                </div>
-                <div class="payment-item vodafone">
-                    <i class="fas fa-mobile-alt"></i>
-                    <div class="pay-name">فودافون كاش</div>
-                </div>
-                <div class="payment-item wallet">
-                    <i class="fas fa-wallet"></i>
-                    <div class="pay-name">محفظة إلكترونية</div>
-                </div>
-                <div class="payment-item whatsapp-pay">
-                    <i class="fab fa-whatsapp"></i>
-                    <div class="pay-name">واتساب</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===== الباقات ===== -->
-    <section class="section" id="pricing">
-        <div class="container">
-            <h2 class="section-title">💎 <span>اختر</span> الباقة</h2>
-            <div class="pricing-grid">
-                <div class="pricing-card">
-                    <h3>الباقة الأساسية</h3>
-                    <div>
-                        <span class="old-price">200 ج.م</span>
-                        <div class="price">99 <span>ج.م</span></div>
-                    </div>
-                    <ul>
-                        <li><i class="fas fa-check"></i> نظام المتجر الكامل</li>
-                        <li><i class="fas fa-check"></i> لوحة تحكم المدير</li>
-                        <li><i class="fas fa-check"></i> دفع عبر واتساب</li>
-                        <li><i class="fas fa-check"></i> يعمل على كل الأجهزة</li>
-                        <li><i class="fas fa-check"></i> تصدير واستيراد البيانات</li>
-                    </ul>
-                    <a href="https://wa.me/201112876080?text=مرحباً!%20أريد%20شراء%20الباقة%20الأساسية%20(99%20جنيه)" target="_blank" class="btn-buy-now">
-                        <i class="fab fa-whatsapp"></i> اطلب الآن - 99 ج.م
-                    </a>
-                </div>
-
-                <div class="pricing-card featured">
-                    <div class="badge"><i class="fas fa-star"></i> الأكثر مبيعاً</div>
-                    <h3>الباقة الاحترافية</h3>
-                    <div>
-                        <span class="old-price">500 ج.م</span>
-                        <div class="price">199 <span>ج.م</span></div>
-                    </div>
-                    <ul>
-                        <li><i class="fas fa-check"></i> كل مميزات الأساسية</li>
-                        <li><i class="fas fa-check"></i> تزامن Firebase</li>
-                        <li><i class="fas fa-check"></i> دعم فني لمدة أسبوع</li>
-                        <li><i class="fas fa-check"></i> فيديو شرح كامل</li>
-                        <li><i class="fas fa-check"></i> تخصيص اسم المتجر</li>
-                    </ul>
-                    <a href="https://wa.me/201112876080?text=مرحباً!%20أريد%20شراء%20الباقة%20الاحترافية%20(199%20جنيه)" target="_blank" class="btn-buy-now">
-                        <i class="fab fa-whatsapp"></i> اطلب الآن - 199 ج.م
-                    </a>
-                </div>
-
-                <div class="pricing-card">
-                    <h3>الباقة الممتازة</h3>
-                    <div>
-                        <span class="old-price">700 ج.م</span>
-                        <div class="price">299 <span>ج.م</span></div>
-                    </div>
-                    <ul>
-                        <li><i class="fas fa-check"></i> كل مميزات الاحترافية</li>
-                        <li><i class="fas fa-check"></i> دعم فني مدى الحياة</li>
-                        <li><i class="fas fa-check"></i> تحديثات مجانية</li>
-                        <li><i class="fas fa-check"></i> تخصيص النظام حسب طلبك</li>
-                        <li><i class="fas fa-check"></i> تركيب الموقع على استضافتك</li>
-                    </ul>
-                    <a href="https://wa.me/201112876080?text=مرحباً!%20أريد%20شراء%20الباقة%20الممتازة%20(299%20جنيه)" target="_blank" class="btn-buy-now">
-                        <i class="fab fa-whatsapp"></i> اطلب الآن - 299 ج.م
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===== الضمان ===== -->
-    <section class="section" style="background:var(--bg);">
-        <div class="container">
-            <div class="guarantee">
-                <i class="fas fa-shield-alt"></i>
-                <h2>ضمان استعادة الأموال لمدة 30 يوماً</h2>
-                <p>إذا لم يكن المنتج مناسباً لك، سنعيد لك كامل المبلغ — بدون طرح أي أسئلة!</p>
-                <div style="display:flex; justify-content:center; gap:20px; flex-wrap:wrap; margin-top:15px;">
-                    <span><i class="fas fa-check-circle" style="color:var(--success);"></i> ضمان 100%</span>
-                    <span><i class="fas fa-check-circle" style="color:var(--success);"></i> دعم فني مجاني</span>
-                    <span><i class="fas fa-check-circle" style="color:var(--success);"></i> تحديثات مستمرة</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===== الفوتر ===== -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2026 متجري. جميع الحقوق محفوظة.</p>
-            <p style="margin-top:10px;">
-                📞 للتواصل عبر واتساب:
-                <a href="https://wa.me/201112876080" target="_blank" style="color:var(--gold); font-weight:700;">
-                    <i class="fab fa-whatsapp"></i> اضغط هنا للتواصل
-                </a>
-            </p>
-            <p style="margin-top:8px;">
-                🖥️ <a href="https://mostafatifa1122-eng.github.io/sotry/" target="_blank">جرب المتجر بنفسك</a>
-            </p>
-        </div>
-    </footer>
-
-    <script>
-        // ===== العد التنازلي =====
-        function startCountdown() {
-            const target = new Date();
-            target.setDate(target.getDate() + 7);
-
-            const timer = setInterval(() => {
-                const now = new Date().getTime();
-                const distance = target - now;
-
-                if (distance < 0) {
-                    clearInterval(timer);
-                    document.querySelector('.timer-section').innerHTML = '<h3 style="color:var(--danger);">🔥 العرض انتهى!</h3>';
-                    return;
-                }
-
-                document.getElementById('days').textContent = String(Math.floor(distance / (1000 * 60 * 60 * 24))).padStart(2, '0');
-                document.getElementById('hours').textContent = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
-                document.getElementById('minutes').textContent = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-                document.getElementById('seconds').textContent = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
-            }, 1000);
-        }
-        startCountdown();
-    </script>
-
-</body>
-</html>
+if __name__ == "__main__":
+    print("\n🚀 جاري تشغيل نظام ERB للمصانع الكيميائية (نسخة المستخدمين والصلاحيات)")
+    print(f"📁 قاعدة البيانات: {DB_PATH}")
+    print("="*60)
+    
+    # تهيئة النظام
+    erp = ERPManager()
+    user_manager = UserManager(erp.db)
+    
+    # إعداد الصلاحيات الافتراضية
+    setup_default_permissions(user_manager)
+    
+    # إنشاء المستخدمين الافتراضيين
+    create_default_users(user_manager)
+    
+    # شاشة تسجيل الدخول
+    current_user = None
+    while not current_user:
+        current_user = login_screen(user_manager)
+        if not current_user:
+            print("حاول مرة أخرى")
+    
+    # الدخول إلى القائمة الرئيسية
+    main_menu_with_auth(erp, user_manager, current_user)
+    
+    # إغلاق قاعدة البيانات
+    erp.db.close()
